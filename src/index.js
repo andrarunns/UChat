@@ -1,8 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { browserSessionPersistence, createUserWithEmailAndPassword, getAuth, setPersistence, signOut, updateProfile } from "firebase/auth";
-import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
-
+import { getFirestore, collection, addDoc, setDoc, doc, updateDoc, deleteDoc, getDoc, getDocs, query, where, FieldPath } from "firebase/firestore"
+import { browserSessionPersistence, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, setPersistence, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -27,7 +26,7 @@ console.log("Auth initialized:", auth);
 // Create a reference variable to the collection
 const userCol = collection(db, "users");
 
-// Adding a user to the "users" collection only
+// Creating User Form ----------------------------------------
 const addAccountForm = document.querySelector("#createAccount");
 
 if (addAccountForm) {
@@ -78,42 +77,38 @@ if (addAccountForm) {
 
 
 
-// Log in Form ------------------------------------------------------------------
-// const loginForm = document.getElementById("login")
-// if (loginForm) {
-//   loginForm.addEventListener("submit", (event) => {
-//     event.preventDefault()
-//     const wrongLogInMessage = document.getElementById('wrongLogIn');
-//     setPersistence(auth, browserSessionPersistence)
-//       .then(() => {
-//         const email = loginForm.email.value
-//         const pass = loginForm.password.value
-//         console.log(email)
-//         console.log(pass)
-//         signInWithEmailAndPassword(auth, email, pass)
-//           .then((userCredential) => {
-//             console.log("Signed In with Created User")
-//             console.log(userCredential.user.uid)
-//             var userRef = doc(userCol, userCredential.user.uid)
-//             console.log(userRef)
-//             getDoc(userRef)
-//               .then((userSnap) => {
-//                 console.log(userSnap.data())
-//                 if (userSnap.data().type == 'admin') {
-//                   location.href = "admin_dash.html"
-//                 } else {
-//                   location.href = "dashboard.html"
-//                 }
-//               }).catch((e) => {
-//                 console.log(e)
-//               })
-//           }).catch((e) => {
-//             console.log(e)
-//             wrongLogInMessage.style.display = 'block';
-//           })
-//       }).catch((e) => {
-//         console.log("Persistence error 2")
-//       })
-//   })
-// }
+//Log in Form ------------------------------------------------------------------
+const loginForm = document.getElementById("login")
+if (loginForm) {
+  loginForm.addEventListener("submit", (event) => {
+    event.preventDefault()
+    const wrongLogInMessage = document.getElementById('wrongLogIn');
+    setPersistence(auth, browserSessionPersistence)
+      .then(() => {
+        const email = loginForm.email.value
+        const pass = loginForm.password.value
+
+        signInWithEmailAndPassword(auth, email, pass)
+          .then((userCredential) => {
+            console.log("Signed In with Created User")
+            console.log(userCredential.user.uid)
+            var userRef = doc(userCol, userCredential.user.uid)
+            console.log(userRef)
+            getDoc(userRef)
+              .then((userSnap) => {
+                console.log(userSnap.data())
+                location.href = "mainMessage.html"
+              
+              }).catch((e) => {
+                console.log(e)
+              })
+          }).catch((e) => {
+            console.log(e)
+            wrongLogInMessage.style.display = 'block';
+          })
+      }).catch((e) => {
+        console.log("Persistence error 2 "+ e )
+      })
+  })
+}
 
