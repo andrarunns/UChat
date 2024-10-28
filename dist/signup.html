@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mijia Bucks Sign-Up</title>
+</head>
+<body class="loginBody">
+    <div class="topBanner">
+        <!--<h3 id="bannerM">Mejia Bucks</h3>-->
+    </div>
+    <br>
+    <form class="signin-form" id="createAccount">
+        <h3 style="color:#00A9BF;">Create An Account</h3><br><br>
+        <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input class="add-acc-input" type="text" id="firstName" name="firstName" aria-label="First Name" required placeholder="Enter your First Name">
+        </div><br><br>
+        <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input class="add-acc-input" type="text" id="lastName" name="lastName" aria-label="Last Name" required placeholder="Enter your Last Name">
+        </div><br><br>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input class="add-acc-input" type="email" id="email" name="email" aria-label="Email" required placeholder="Enter your Email">
+        </div><br><br>
+        <div class="form-group">
+            <label for="password">Create Password:</label>
+            <input class="add-acc-input" type="password" id="password" name="password" aria-label="Password" required placeholder="Enter your Password">
+        </div>
+        <p id="passInstructions"><br>Enter 6-32 characters, use a special character and numbers.<br><b>Do not use your name!</b></p>
+        <br>
+        <input class="loginPageButtons" type="submit" value="CREATE ACCOUNT">
+        <br>
+    </form>
+    <div class="factBox">
+        Already have an account?<br>No need to create a new one.<br><br>
+        <a id="signupB" href="login.html">Log In!</a>
+    </div>
+    <script defer src="bundle.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap" rel="stylesheet">
+    <title>Mijia Bucks Log-In</title>
+</head>
+<body class="loginBody">
+    <div class="topBanner">
+        <img id="logo" src="whitemejiabuckslogo.png" style="width: 250px; height: auto;">
+    </div>
+    <div>
+        <form class="login-form" id="login">
+            <h3 style="color:#00A9BF;">Log-In To Manage Your Accounts</h3><br><br>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input id="email" style="width: 150px; height: 20px;" type="text" required placeholder="Enter your email">
+            </div>
+            <br><br>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input id="password" style="width: 150px; height: 20px;" type="password" required placeholder="Enter your password">
+            </div>
+            <br><br>
+            <input class="loginPageButtons" type="submit" value="LOG IN">
+            <div id="wrongLogIn" style="color: red; display: none !important;">
+                <br>Incorrect email or password. Please try again!
+            </div>
+        </form>
+    </div>
+    <div class="factBox">
+        Don't have an account?<br>Take less than 5 minutes and create your account today.<br><br>
+        <a id="signupB" href="signup.html"> Sign Up Here!</a>
+    </div>
+    <script src="bundle.js"></script>
+</body>
+</html>
