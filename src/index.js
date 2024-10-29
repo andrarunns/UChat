@@ -97,7 +97,7 @@ if (loginForm) {
             getDoc(userRef)
               .then((userSnap) => {
                 console.log(userSnap.data())
-                location.href = "mainMessage.html"
+                location.href = "messagingDashboard.html"
               
               }).catch((e) => {
                 console.log(e)
