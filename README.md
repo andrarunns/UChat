@@ -18,3 +18,6 @@ Lastly run the following to see application running
 ``` bash
 npm run build
 ```
+
+
+To view the working application right click your code and select view with live server
