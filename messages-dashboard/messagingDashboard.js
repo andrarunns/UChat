@@ -1,7 +1,7 @@
 // Import the necessary Firebase functions
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { getFirestore, doc, getDoc, collection, getDocs } from "firebase/firestore"; // Import Firestore functions
+import { getFirestore, doc, getDoc, collection, getDocs, query, where } from "firebase/firestore"; // Import Firestore functions
 
 // Firebase configuration
 const firebaseConfig = {
@@ -111,3 +111,31 @@ window.addEventListener("click", (event) => {
         addFriendModal.style.display = "none";
     }
 });
+
+// Function to search for the user's email in Firestore
+async function searchForUserEmail() {
+    const emailInput = document.getElementById("friendEmail").value.trim(); // Get email from the correct input
+
+    if (!emailInput) {
+        alert("Please enter an email address.");
+        return;
+    }
+
+    try {
+        // Query Firestore for a document in the 'users' collection that matches the email
+        const usersRef = collection(db, "users");
+        const emailQuery = query(usersRef, where("email", "==", emailInput));
+        const querySnapshot = await getDocs(emailQuery);
+
+        if (!querySnapshot.empty) {
+            alert("Friend request sent successfully!");
+        } else {
+            alert("User does not exist.");
+        }
+    } catch (error) {
+        console.error("Error searching for user:", error);
+        alert("An error occurred. Please try again later.");
+    }
+}
+
+document.getElementById("sendFriendRequest").addEventListener("click", searchForUserEmail);
