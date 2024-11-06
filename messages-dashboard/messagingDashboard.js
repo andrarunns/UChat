@@ -90,3 +90,24 @@ if (signOutButton) {
         });
     });
 }
+
+const addFriendModal = document.getElementById("addFriendModal");
+const addFriendButton = document.getElementById("addFriendButton");
+const closeModal = document.getElementById("closeModal");
+
+// Show modal on "Add Friend" button click
+addFriendButton.addEventListener("click", () => {
+    addFriendModal.style.display = "flex";
+});
+
+// Close modal when clicking the close button
+closeModal.addEventListener("click", () => {
+    addFriendModal.style.display = "none";
+});
+
+// Optional: Close modal when clicking outside of the modal content
+window.addEventListener("click", (event) => {
+    if (event.target == addFriendModal) {
+        addFriendModal.style.display = "none";
+    }
+});
