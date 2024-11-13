@@ -2,7 +2,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, setDoc, doc, updateDoc, deleteDoc, getDoc, getDocs, query, where, FieldPath } from "firebase/firestore"
 import { browserSessionPersistence, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, setPersistence, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth"
-import '../messages-dashboard/messagingDashboard.js';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -38,14 +37,6 @@ if (addAccountForm) {
     const lastname = addAccountForm.lastName.value;
     const email = addAccountForm.email.value;
     const pass = addAccountForm.password.value;
-    const friends = []
-    const conversations = []
-
-    // If password is less than 6 characters, show an alert and return to stop further code execution
-    if (pass.length < 6) {
-      alert('Password must be at least 6 characters long.');
-      return; // This will exit the function and prevent further code execution
-    }
 
     // Set session persistence
     setPersistence(auth, browserSessionPersistence)
@@ -66,8 +57,7 @@ if (addAccountForm) {
           lastname: lastname,
           email: email,
           uid: uid,
-          friends: friends,
-          conversations: conversations
+          friends: {} // or any other fields you want to initialize
         };
 
         // Set new user data in Firestore
@@ -77,7 +67,7 @@ if (addAccountForm) {
         console.log("New user added successfully");
         
         // Redirect to dashboard or other page if needed
-        location.href = "../messages-dashboard/messagingDashboard.html";
+        location.href = "messagingDashboard.html";
       })
       .catch((error) => {
         console.log("Error creating user or adding to Firestore:", error);
@@ -107,7 +97,7 @@ if (loginForm) {
             getDoc(userRef)
               .then((userSnap) => {
                 console.log(userSnap.data())
-                location.href = "../messages-dashboard/messagingDashboard.html"
+                location.href = "messagingDashboard.html"
               
               }).catch((e) => {
                 console.log(e)
