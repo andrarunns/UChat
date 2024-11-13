@@ -1,6 +1,8 @@
+// Import the necessary Firebase functions
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { getFirestore, doc, getDoc, collection, getDocs } from "firebase/firestore"; // Import Firestore functions
+import { getFirestore, doc, getDoc, collection, getDocs, query, where } from "firebase/firestore"; // Import Firestore functions
+
 // Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBgkWWt1NZL_QWAhsUyxAuF91i5V0P2JHc",
@@ -10,10 +12,12 @@ const firebaseConfig = {
     messagingSenderId: "397312451749",
     appId: "1:397312451749:web:6128f84f311b045f9d194c"
 };
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app); // Initialize Firestore
+
 // Automatically fetch user conversations when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     onAuthStateChanged(auth, async (user) => {
@@ -29,31 +33,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 // Function to get the current user's conversations
 async function fetchUserConversations() {
     const user = auth.currentUser;  // Get the current logged-in user
+
     if (!user) {
         console.log('No user is logged in.');
         return;
     }
+
     try {
         // Access the current user's document in Firestore
         const userDocRef = doc(db, "users", user.uid);
         const userDocSnapshot = await getDoc(userDocRef);
+
         if (!userDocSnapshot.exists()) {
             console.log("User document not found");
             return;
         }
+
         // Access the conversations array
         const userData = userDocSnapshot.data();
         const conversations = userData.conversations || [];
+
         if (conversations.length === 0) {
             console.log('No conversations available for this user.');
             return;
         }
+
         // If there are conversations, fetch them from the Firestore 'conversations' collection
         const conversationsRef = collection(db, "conversations");
         const querySnapshot = await getDocs(conversationsRef);
+
         querySnapshot.forEach((doc) => {
             if (conversations.includes(doc.id)) {
                 console.log("Conversation ID: " + doc.id);
@@ -64,6 +76,7 @@ async function fetchUserConversations() {
         console.error("Error fetching conversations:", error);
     }
 }
+
 // Sign Out Functionality
 const signOutButton = document.getElementById("signOutButton");
 if (signOutButton) {
@@ -77,3 +90,52 @@ if (signOutButton) {
         });
     });
 }
+
+const addFriendModal = document.getElementById("addFriendModal");
+const addFriendButton = document.getElementById("addFriendButton");
+const closeModal = document.getElementById("closeModal");
+
+// Show modal on "Add Friend" button click
+addFriendButton.addEventListener("click", () => {
+    addFriendModal.style.display = "flex";
+});
+
+// Close modal when clicking the close button
+closeModal.addEventListener("click", () => {
+    addFriendModal.style.display = "none";
+});
+
+// Optional: Close modal when clicking outside of the modal content
+window.addEventListener("click", (event) => {
+    if (event.target == addFriendModal) {
+        addFriendModal.style.display = "none";
+    }
+});
+
+// Function to search for the user's email in Firestore
+async function searchForUserEmail() {
+    const emailInput = document.getElementById("friendEmail").value.trim(); // Get email from the correct input
+
+    if (!emailInput) {
+        alert("Please enter an email address.");
+        return;
+    }
+
+    try {
+        // Query Firestore for a document in the 'users' collection that matches the email
+        const usersRef = collection(db, "users");
+        const emailQuery = query(usersRef, where("email", "==", emailInput));
+        const querySnapshot = await getDocs(emailQuery);
+
+        if (!querySnapshot.empty) {
+            alert("Friend request sent successfully!");
+        } else {
+            alert("User does not exist.");
+        }
+    } catch (error) {
+        console.error("Error searching for user:", error);
+        alert("An error occurred. Please try again later.");
+    }
+}
+
+document.getElementById("sendFriendRequest").addEventListener("click", searchForUserEmail);
