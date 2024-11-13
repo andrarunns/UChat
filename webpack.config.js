@@ -1,12 +1,13 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
-    mode: 'development',
-    entry: './src/index.js',
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js'
-    },
-
-    watch: true
-}
+  entry: {
+    login: './src/index.js',   // Entry point for login page
+    dashboard: './dashboard/dashboard.js'  // Entry point for dashboard page
+  },
+  output: {
+    filename: '[name].bundle.js',  // This will create 'login.bundle.js' and 'dashboard.bundle.js'
+    path: path.resolve(__dirname, 'dist'),
+  },
+  mode: 'development',  // Change to 'production' for production builds
+};

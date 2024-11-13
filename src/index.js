@@ -67,7 +67,7 @@ if (addAccountForm) {
         console.log("New user added successfully");
         
         // Redirect to dashboard or other page if needed
-        location.href = "messagingDashboard.html";
+        location.href = "../dashboard/dashboard.html";
       })
       .catch((error) => {
         console.log("Error creating user or adding to Firestore:", error);
@@ -97,7 +97,7 @@ if (loginForm) {
             getDoc(userRef)
               .then((userSnap) => {
                 console.log(userSnap.data())
-                location.href = "messagingDashboard.html"
+                location.href = "../dashboard/dashboard.html"
               
               }).catch((e) => {
                 console.log(e)
