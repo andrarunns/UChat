@@ -4,7 +4,7 @@ If this is your first time cloing into the reposistory, you must run the follwoi
 
 ``` bash
 npm init -y
-npm i webpack-cli-D
+npm i webpack-cli -D
 npm install firebase
 ```
 
@@ -18,3 +18,6 @@ Lastly run the following to see application running
 ``` bash
 npm run build
 ```
+
+
+To view the working application right click your code and select view with live server

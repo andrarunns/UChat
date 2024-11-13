@@ -37,6 +37,14 @@ if (addAccountForm) {
     const lastname = addAccountForm.lastName.value;
     const email = addAccountForm.email.value;
     const pass = addAccountForm.password.value;
+    const friends = []
+    const conversations = []
+
+    // If password is less than 6 characters, show an alert and return to stop further code execution
+    if (pass.length < 6) {
+      alert('Password must be at least 6 characters long.');
+      return; // This will exit the function and prevent further code execution
+    }
 
     // Set session persistence
     setPersistence(auth, browserSessionPersistence)
@@ -57,7 +65,8 @@ if (addAccountForm) {
           lastname: lastname,
           email: email,
           uid: uid,
-          friends: {} // or any other fields you want to initialize
+          friends: friends,
+          conversations: conversations
         };
 
         // Set new user data in Firestore
