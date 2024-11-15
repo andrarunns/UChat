@@ -197,10 +197,13 @@ async function updateNotificationBell() {
             notificationDot.style.display = "block";
         }
 
-      
-
     } catch (error) {
         console.error("Error fetching conversations:", error);
     }
 }
 
+// Redirect to notification page when the bell icon is clicked
+const notificationBell = document.getElementById("notificationBell");
+notificationBell.addEventListener("click", () => {
+    window.location.href= "/notifications/notifications.html";
+});
