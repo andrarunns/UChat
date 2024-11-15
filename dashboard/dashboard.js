@@ -1,7 +1,7 @@
 // Import the necessary Firebase functions
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { getFirestore, doc, getDoc, collection, getDocs, query, where } from "firebase/firestore"; // Import Firestore functions
+import { getFirestore, doc, getDoc, collection, getDocs, query, where, updateDoc } from "firebase/firestore"; // Import Firestore functions
 
 // Firebase configuration
 const firebaseConfig = {
@@ -111,13 +111,18 @@ window.addEventListener("click", (event) => {
         addFriendModal.style.display = "none";
     }
 });
-
-// Function to search for the user's email in Firestore
+// Function to search for the user's email in Firestore and send a friend request
 async function searchForUserEmail() {
     const emailInput = document.getElementById("friendEmail").value.trim(); // Get email from the correct input
+    const currentUser = auth.currentUser; // Get the currently logged-in user
 
     if (!emailInput) {
         alert("Please enter an email address.");
+        return;
+    }
+
+    if (!currentUser) {
+        alert("You must be logged in to send a friend request.");
         return;
     }
 
@@ -128,6 +133,25 @@ async function searchForUserEmail() {
         const querySnapshot = await getDocs(emailQuery);
 
         if (!querySnapshot.empty) {
+            // Get the first matching document (assuming emails are unique)
+            const userDoc = querySnapshot.docs[0];
+            const userDocRef = doc(db, "users", userDoc.id);
+            const userData = userDoc.data();
+
+            // Check if the friendRequest array exists; if not, initialize it
+            const friendRequests = userData.friendRequest || [];
+
+            if (friendRequests.includes(currentUser.uid)) {
+                alert("Friend request already sent.");
+                return;
+            }
+
+            // Add the current user's UID to the friendRequest array
+            friendRequests.push(currentUser.uid);
+
+            // Update the user's document with the new friendRequest array
+            await updateDoc(userDocRef, { friendRequest: friendRequests });
+
             alert("Friend request sent successfully!");
         } else {
             alert("User does not exist.");
