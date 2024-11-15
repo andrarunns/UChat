@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("User is logged in:", user);
             try {
                 await fetchUserConversations(); // Call the function if user is logged in
+                await updateNotificationBell();
             } catch (error) {
                 console.error('Error calling fetchUserConversations:', error);
             }
@@ -163,3 +164,43 @@ async function searchForUserEmail() {
 }
 
 document.getElementById("sendFriendRequest").addEventListener("click", searchForUserEmail);
+
+
+async function updateNotificationBell() {
+    const user = auth.currentUser;  // Get the current logged-in user
+
+    if (!user) {
+        console.log('No user is logged in.');
+        return;
+    }
+
+    try {
+        // Access the current user's document in Firestore
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnapshot = await getDoc(userDocRef);
+
+        if (!userDocSnapshot.exists()) {
+            console.log("User document not found");
+            return;
+        }
+
+        // Access the conversations array
+        const userData = userDocSnapshot.data();
+        const friends = userData.friendRequest || [];
+
+        if (friends.length === 0) {
+            console.log('No friends available for this user.');
+            notificationDot.style.display = "none";
+            return;
+        }else {
+            console.log(friends.length);
+            notificationDot.style.display = "block";
+        }
+
+      
+
+    } catch (error) {
+        console.error("Error fetching conversations:", error);
+    }
+}
+
