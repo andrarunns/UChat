@@ -12,13 +12,18 @@
         <img src="/dist/pickaxe.png" alt="Pickaxe Icon" class="pickaxe">
     </div>
 
-    <div class="notificationContainer">
-        <div class="notificationTitle">
-            Friend Requests
-        </div>
-        <div id="friendRequestsList"></div>
-    </div>
+    <table id="notificationsTable">
+        <thead>
+            <tr>
+                <th>Notification</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Friend requests will be dynamically added here -->
+        </tbody>
+    </table>
 
-    <script src="../dist/notification.bundle.js"></script>
+    <script src="../dist/notifiations.bundle.js"></script>
 </body>
 </html>
