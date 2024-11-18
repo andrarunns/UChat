@@ -1,0 +1,99 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Dosis', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #f4f4f9;
+    height: 100vh;
+    padding-top: 120px;
+}
+
+/* Top banner style */
+.topBanner {
+    width: 100%;
+    height: 100px;
+    padding: 10px 20px;
+    background-color: #2b3030;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.topBanner h1 {
+    color: orange;
+    font-size: 90px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.topBanner img.pickaxe {
+    height: 60px;
+    width: auto;
+    margin-right: 20px;
+}
+
+.notificationContainer {
+    width: 80%;
+    max-width: 800px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.notificationTitle {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.friendRequest {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.friendRequest p {
+    margin: 0;
+    color: #555;
+}
+
+.actionButtons {
+    display: flex;
+    gap: 10px;
+}
+
+.actionButtons button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.acceptButton {
+    background-color: green;
+    color: white;
+}
+
+.declineButton {
+    background-color: red;
+    color: white;
+}
+
+.actionButtons button:hover {
+    opacity: 0.8;
+}
