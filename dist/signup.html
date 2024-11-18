@@ -3,40 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mijia Bucks Sign-Up</title>
+    <title>Sign-Up</title>
+
+    <!-- Include Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* Apply reset and common styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Dosis', sans-serif;
+        }
+
+        /* Main body styling */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-image: url('login_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #f4f4f9;
+            position: relative;
+        }
+
+        /* Top banner styling */
+        .topBanner {
+            width: 100%;
+            height: 100px;
+            padding: 10px 20px;
+            background-color: #2b3030;
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            justify-content: center;
+        }
+
+        .topBanner h1 {
+            color: orange;
+            font-size: 90px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* Styling for the pickaxe image */
+        .topBanner img.pickaxe {
+            height: 60px; /* Adjust the size as needed */
+            width: auto;
+            margin-right: 20px; /* Optional margin for spacing */
+        }
+
+        /* Centered form styling */
+        .signin-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+            margin-top: 120px;
+        }
+
+        .signin-form h3 {
+            color: #00A9BF;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .add-acc-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        /* Password instructions */
+        #passInstructions {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        /* Button styling */
+        .loginPageButtons {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background-color: orange;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .loginPageButtons:hover {
+            background-color: #a36d00;
+        }
+
+        /* Sign-in prompt styling */
+        .factBox {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #333;
+            text-align: center;
+        }
+
+        .factBox a {
+            color: orange;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .factBox a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-<body class="loginBody">
+<body>
     <div class="topBanner">
-        <!--<h3 id="bannerM">Mejia Bucks</h3>-->
+        <h1>UChat</h1>
+        <img src="pickaxe.png" alt="Pickaxe Icon" class="pickaxe">
     </div>
-    <br>
+    
     <form class="signin-form" id="createAccount">
-        <h3 style="color:#00A9BF;">Create An Account</h3><br><br>
+        <h3>Create An Account</h3>
         <div class="form-group">
             <label for="firstName">First Name:</label>
             <input class="add-acc-input" type="text" id="firstName" name="firstName" aria-label="First Name" required placeholder="Enter your First Name">
-        </div><br><br>
+        </div>
         <div class="form-group">
             <label for="lastName">Last Name:</label>
             <input class="add-acc-input" type="text" id="lastName" name="lastName" aria-label="Last Name" required placeholder="Enter your Last Name">
-        </div><br><br>
+        </div>
         <div class="form-group">
             <label for="email">Email:</label>
             <input class="add-acc-input" type="email" id="email" name="email" aria-label="Email" required placeholder="Enter your Email">
-        </div><br><br>
+        </div>
         <div class="form-group">
             <label for="password">Create Password:</label>
             <input class="add-acc-input" type="password" id="password" name="password" aria-label="Password" required placeholder="Enter your Password">
         </div>
-        <p id="passInstructions"><br>Enter 6-32 characters, use a special character and numbers.<br><b>Do not use your name!</b></p>
-        <br>
+        <p id="passInstructions">Enter 6-32 characters, use a special character and numbers.<br><b>Do not use your name!</b></p>
         <input class="loginPageButtons" type="submit" value="CREATE ACCOUNT">
-        <br>
+
+        <p id="passInstructions">Already have an account?<br></p>
+        <a href="login.html">Log In!</a>
     </form>
-    <div class="factBox">
-        Already have an account?<br>No need to create a new one.<br><br>
-        <a id="signupB" href="login.html">Log In!</a>
-    </div>
+    
     <script defer src="bundle.js"></script>
 </body>
 </html>

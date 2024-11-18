@@ -13,7 +13,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "firebase": "^11.0.1"
+    "firebase": "^11.0.2"
   },
-  "description": ""
+  "description": "If this is your first time cloing into the reposistory, you must run the follwoing commands"
 }
