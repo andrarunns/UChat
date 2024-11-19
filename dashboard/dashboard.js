@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc, collection, getDocs, query, where, updateDoc } from "firebase/firestore"; // Import Firestore functions
 
+
 // Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBgkWWt1NZL_QWAhsUyxAuF91i5V0P2JHc",
@@ -206,4 +207,79 @@ async function updateNotificationBell() {
 const notificationBell = document.getElementById("notificationBell");
 notificationBell.addEventListener("click", () => {
     window.location.href= "/notifications/notifications.html";
+});
+
+// Function to initialize the friends dropdown
+async function initializeFriendsDropdown(user) {
+    try {
+        // Fetch user document from Firestore
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnapshot = await getDoc(userDocRef);
+
+        if (!userDocSnapshot.exists()) {
+            console.log("User document not found");
+            return;
+        }
+
+        // Access the friends array
+        const userData = userDocSnapshot.data();
+        const friends = userData.friends;
+        console.log(friends);
+
+        // References
+        const newChatButton = document.getElementById('newChat');
+        const friendsDropdown = document.getElementById('friendsDropdown');
+
+        // Toggle dropdown visibility
+        newChatButton.addEventListener('click', () => {
+            friendsDropdown.style.display = friendsDropdown.style.display === 'none' || friendsDropdown.style.display === '' ? 'block' : 'none';
+        });
+
+        // Populate friends list
+        friends.forEach(friend => {
+            const listItem = document.createElement('li');
+            listItem.textContent = friend; // Adjust if friends array contains objects
+            listItem.style.padding = '10px';
+            listItem.style.cursor = 'pointer';
+            listItem.style.borderBottom = '1px solid #ccc';
+
+            // Add hover effect
+            listItem.addEventListener('mouseover', () => {
+                listItem.style.backgroundColor = '#f0f0f0';
+            });
+            listItem.addEventListener('mouseout', () => {
+                listItem.style.backgroundColor = '';
+            });
+
+            // Add click handler to initiate chat
+            listItem.addEventListener('click', () => {
+                alert(`Starting chat with ${friend}`);
+                friendsDropdown.style.display = 'none'; // Hide dropdown
+            });
+
+            friendsDropdown.appendChild(listItem);
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!newChatButton.contains(event.target) && !friendsDropdown.contains(event.target)) {
+                friendsDropdown.style.display = 'none';
+            }
+        });
+    } catch (error) {
+        console.error("Error fetching user document:", error);
+    }
+}
+
+// Listen for user authentication state changes
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        console.log("User is logged in:", user);
+
+        // Initialize friends dropdown after ensuring user is logged in
+        await initializeFriendsDropdown(user);
+
+    } else {
+        console.log('No user is logged in. allegedly');
+    }
 });

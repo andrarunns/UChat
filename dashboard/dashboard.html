@@ -10,6 +10,15 @@
     <header style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background-color: #333; color: #fff;">
         <!-- Add Friend Button -->
         <button id="addFriendButton">+ Add Friend</button>
+         <!-- New Chat Dropdown -->
+         <div style="position: relative;">
+            <button id="newChat" style="background-color: #4CAF50; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">
+                + New Chat
+            </button>
+            <ul id="friendsDropdown" style="display: none; position: absolute; top: 100%; left: 0; background-color: #fff; border: 1px solid #ccc; list-style: none; padding: 0; margin: 0; width: 200px; z-index: 100;">
+                <!-- Friends list will be dynamically populated -->
+            </ul>
+        </div>
 
            <!-- Centered Search Bar and Alert Icon -->
            <div style="display: flex; align-items: center; width: 50%; justify-content: center;">
