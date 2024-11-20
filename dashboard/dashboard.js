@@ -381,26 +381,26 @@ async function createNewChat(currentUser, friend) {
             console.warn("Friend document does not exist:", friend.uid);
         }
 
-        // Step 2: Add messages to the messages subcollection
-        const messagesRef = collection(newChatRef, "messages");
+        // // Step 2: Add messages to the messages subcollection
+        // const messagesRef = collection(newChatRef, "messages");
 
-        const message1 = {
-            sender: currentUser.email,
-            text: "Hi!",
-            timestamp: serverTimestamp(),
-            seenBy: [currentUser.email]
-        };
+        // const message1 = {
+        //     sender: currentUser.email,
+        //     text: "Hi!",
+        //     timestamp: serverTimestamp(),
+        //     seenBy: [currentUser.email]
+        // };
 
-        const message2 = {
-            sender: friend.email,
-            text: "Hello, how are you?",
-            timestamp: serverTimestamp(),
-            seenBy: []
-        };
+        // const message2 = {
+        //     sender: friend.email,
+        //     text: "Hello, how are you?",
+        //     timestamp: serverTimestamp(),
+        //     seenBy: []
+        // };
 
-        // Add the messages
-        await addDoc(messagesRef, message1);
-        await addDoc(messagesRef, message2);
+        // // Add the messages
+        // await addDoc(messagesRef, message1);
+        // await addDoc(messagesRef, message2);
 
         console.log("Messages added to subcollection!");
 
