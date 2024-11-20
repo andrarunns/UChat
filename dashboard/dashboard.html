@@ -4,54 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Messaging Page</title>
-    <link rel="stylesheet" href="messagingDashboard.css">
+
+    <!-- Google Fonts and FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel=" stylesheet" href= "messagingDashboard.css">
 </head>
 <body>
-    <header style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background-color: #333; color: #fff;">
-        <!-- Add Friend Button -->
-        <button id="addFriendButton">+ Add Friend</button>
-         <!-- New Chat Dropdown -->
-         <div style="position: relative;">
-            <button id="newChat" style="background-color: #4CAF50; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">
-                + New Chat
-            </button>
-            <ul id="friendsDropdown" style="display: none; position: absolute; top: 100%; left: 0; background-color: #fff; border: 1px solid #ccc; list-style: none; padding: 0; margin: 0; width: 200px; z-index: 100;">
-                <!-- Friends list will be dynamically populated -->
-            </ul>
-        </div>
 
-           <!-- Centered Search Bar and Alert Icon -->
-           <div style="display: flex; align-items: center; width: 50%; justify-content: center;">
-            <input type="text" placeholder="Search..." style="width: 100%; padding: 8px; border: none; border-radius: 4px;" />
-            <button id="notificationBell" href= "/notifications/notifications.html" style="background: none; border: none; color: #fff; cursor: pointer; margin-left: 10px; position: relative;">
+    <!-- Top Banner Section -->
+    <div class="topBanner">
+        <h1>UChat</h1>
+        <img src="/dist/pickaxe.png" alt="Pickaxe Icon" class="pickaxe">
+
+        <!-- Search Bar inside the top banner -->
+        <div class="searchContainer">
+            <input type="text" placeholder="Search..." />
+            <button id="notificationBell">
                 <span style="font-size: 20px;">🔔</span>
-                <!-- Red dot, initially hidden -->
-                <span id="notificationDot" style="position: absolute; top: 5px; right: 5px; height: 8px; width: 8px; background-color: red; border-radius: 50%; display: none;"></span>
+                <span id="notificationDot"></span>
             </button>
         </div>
 
-        
-        <!-- Sign Out Button -->
-        <div style="display: flex; justify-content: flex-end;">
-            <button id="signOutButton" style="background-color: #555; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">
-                Sign Out
-            </button>
+        <!-- Buttons inside the top banner -->
+        <div class="topBannerButtons">
+            <button id="addFriendButton">+ Add Friend</button>
+            <button id="newChat">+ New Chat</button>
+            <button id="signOutButton">Sign Out</button>
         </div>
-    </header>
-
-    <div>
-        <div id="display">display</div>
     </div>
 
+    <!-- Display Section -->
+    <div id="display">display</div>
+
     <!-- Add Friend Modal -->
-    <div id="addFriendModal">   
+    <div id="addFriendModal">
         <div class="modal-content">
             <span class="close" id="closeModal">&times;</span>
             <h3>Add a Friend</h3>
-            <input type="text" id="friendEmail" placeholder="Enter friend's email" style="width: 100%; padding: 8px; margin: 10px 0;" />
-            <button id="sendFriendRequest" style="background-color: #4CAF50; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">
-                Send Request
-            </button>
+            <input type="text" id="friendEmail" placeholder="Enter friend's email" />
+            <button id="sendFriendRequest">Send Request</button>
         </div>
     </div>
 
