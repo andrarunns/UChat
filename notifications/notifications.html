@@ -7,10 +7,27 @@
     <link rel="stylesheet" href="notifications.css">
 </head>
 <body>
-    <div class="topBanner">
+   <!-- Top Banner Section -->
+   <div class="topBanner">
+    <a href="/dashboard/dashboard.html" style="text-decoration: none; color: inherit;">
         <h1>UChat</h1>
-        <img src="/dist/pickaxe.png" alt="Pickaxe Icon" class="pickaxe">
+    </a>
+    <img src="/dist/pickaxe.png" alt="Pickaxe Icon" class="pickaxe">
+
+    <!-- Search Bar inside the top banner -->
+    <div class="searchContainer">
+        <input type="text" placeholder="Search..." />
+        <button id="notificationBell">
+            <span style="font-size: 20px;">🔔</span>
+            <span id="notificationDot"></span>
+        </button>
     </div>
+
+    <!-- Buttons inside the top banner -->
+    <div class="topBannerButtons">
+        <button id="signOutButton">Sign Out</button>
+    </div>
+</div>
 
     <table id="notificationsTable">
         <thead>

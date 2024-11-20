@@ -5,6 +5,7 @@ import {
     onAuthStateChanged,
     setPersistence,
     browserLocalPersistence,
+    signOut
 } from "firebase/auth";
 import {
     getFirestore,
@@ -207,5 +208,19 @@ async function declineFriendRequest(uid) {
         console.error("Error declining friend request:", error);
         alert("Failed to decline friend request. Please try again.");
     }
+}
+
+// Sign Out Functionality
+const signOutButton = document.getElementById("signOutButton");
+if (signOutButton) {
+    signOutButton.addEventListener("click", function() {
+        signOut(auth).then(() => {
+            console.log("Signed out successfully.");
+            location.href="../dist/login.html";
+            alert("Signed out successfully.");
+        }).catch((error) => {
+            console.error("Sign out error:", error);
+        });
+    });
 }
 
