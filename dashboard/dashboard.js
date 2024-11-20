@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to get the current user's conversations
 async function fetchUserConversations() {
-    const user = auth.currentUser;  // Get the current logged-in user
+    const user = auth.currentUser; // Get the current logged-in user
 
     if (!user) {
         console.log('No user is logged in.');
@@ -57,27 +57,71 @@ async function fetchUserConversations() {
 
         // Access the conversations array
         const userData = userDocSnapshot.data();
-        const conversations = userData.conversations || [];
+        const conversations = userData.chats || [];
 
         if (conversations.length === 0) {
             console.log('No conversations available for this user.');
             return;
         }
 
-        // If there are conversations, fetch them from the Firestore 'conversations' collection
-        const conversationsRef = collection(db, "conversations");
+        // Get the conversations container in the DOM
+        const conversationsContainer = document.getElementById('chatList');
+        conversationsContainer.innerHTML = ""; // Clear any existing content
+
+        // Fetch the conversations from Firestore 'chats' collection
+        const conversationsRef = collection(db, "chats");
         const querySnapshot = await getDocs(conversationsRef);
 
-        querySnapshot.forEach((doc) => {
-            if (conversations.includes(doc.id)) {
-                console.log("Conversation ID: " + doc.id);
-                // You could append these to the DOM or display them in any way you want
+        querySnapshot.forEach(async (chatDoc) => {
+            if (conversations.includes(chatDoc.id)) {
+                const chatData = chatDoc.data();
+            
+                // Filter out the currently logged-in user from the participants
+                const otherUsers = chatData.participants.filter((participant) => participant !== user.uid);
+            
+                // Display each other user in the chat
+                otherUsers.forEach(async (otherUserId) => {
+                    try {
+                        // Fetch user details from Firestore
+                        const userDocRef = doc(db, "users", otherUserId);
+                        const userDocSnapshot = await getDoc(userDocRef);
+            
+                        if (!userDocSnapshot.exists()) {
+                            console.log(`User document not found for ID: ${otherUserId}`);
+                            return;
+                        }
+            
+                        const otherUserData = userDocSnapshot.data();
+                        const fullName = `${otherUserData.firstname} ${otherUserData.lastname }`;
+            
+                        // Create the list item
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${fullName}: ${chatData.lastMessage}`; // Display the full name
+                        listItem.className = "chat-item";
+            
+                        // Add a click listener to open the chat or navigate
+                        listItem.addEventListener('click', () => {
+                            alert(`Opening chat with: ${fullName}`);
+                        });
+            
+                        conversationsContainer.appendChild(listItem); // Append to the container
+                    } catch (error) {
+                        console.error(`Error fetching user details for ID: ${otherUserId}`, error);
+                    }
+                });
             }
         });
     } catch (error) {
         console.error("Error fetching conversations:", error);
     }
 }
+
+// Helper function to display messages in the chat list container
+function displayMessage(message) {
+    const conversationsContainer = document.getElementById('chatList');
+    conversationsContainer.innerHTML = `<li>${message}</li>`;
+}
+
 
 // Sign Out Functionality
 const signOutButton = document.getElementById("signOutButton");
