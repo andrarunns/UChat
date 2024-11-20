@@ -348,6 +348,29 @@ async function createNewChat(currentUser, friend) {
             return;
         }
 
+        // Query to check if a chat already exists between these two users
+        const chatsQuery = query(
+            collection(db, "chats"),
+            where("participants", "array-contains", currentUser.uid)
+        );
+        const chatsSnapshot = await getDocs(chatsQuery);
+
+        // Check if any of the chats include the friend
+        let existingChatId = null;
+        chatsSnapshot.forEach((doc) => {
+            const chatData = doc.data();
+            if (chatData.participants.includes(friend.uid)) {
+                existingChatId = doc.id;
+            }
+        });
+
+        if (existingChatId) {
+            console.log("Chat already exists with ID:", existingChatId);
+            // Redirect the user to the existing chat page
+            window.location.href = `/chat/chat.html?chatId=${existingChatId}`;
+            return;
+        }
+
         // Generate a new chat ID manually
         const chatId = Math.floor(10000 + Math.random() * 90000).toString();
         const newChatRef = doc(db, "chats", chatId); // Create a reference for the new chat
@@ -381,39 +404,15 @@ async function createNewChat(currentUser, friend) {
             console.warn("Friend document does not exist:", friend.uid);
         }
 
-        // // Step 2: Add messages to the messages subcollection
-        // const messagesRef = collection(newChatRef, "messages");
-
-        // const message1 = {
-        //     sender: currentUser.email,
-        //     text: "Hi!",
-        //     timestamp: serverTimestamp(),
-        //     seenBy: [currentUser.email]
-        // };
-
-        // const message2 = {
-        //     sender: friend.email,
-        //     text: "Hello, how are you?",
-        //     timestamp: serverTimestamp(),
-        //     seenBy: []
-        // };
-
-        // // Add the messages
-        // await addDoc(messagesRef, message1);
-        // await addDoc(messagesRef, message2);
-
         console.log("Messages added to subcollection!");
 
         // Redirect the user to the chat page
         window.location.href = `/chat/chat.html?chatId=${chatId}`;
-       
-        
 
     } catch (error) {
         console.error("Error creating new chat:", error.message);
     }
 }
-
 
 
 // Listen for user authentication state changes
