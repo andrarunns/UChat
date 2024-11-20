@@ -98,10 +98,13 @@ async function fetchUserConversations() {
                         const listItem = document.createElement('li');
                         listItem.textContent = `${fullName}: ${chatData.lastMessage}`; // Display the full name
                         listItem.className = "chat-item";
-            
+                        
                         // Add a click listener to open the chat or navigate
                         listItem.addEventListener('click', () => {
                             alert(`Opening chat with: ${fullName}`);
+                            
+                            window.location.href = `/chat/chat.html?chatId=${chatDoc.id}`;
+                            
                         });
             
                         conversationsContainer.appendChild(listItem); // Append to the container

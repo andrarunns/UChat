@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, collection, query, where, orderBy, getDocs, onSnapshot, addDoc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, doc, collection, query, where, orderBy, getDocs, onSnapshot, addDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -65,11 +65,21 @@ async function loadChatData() {
             if (messageText === "") return;
 
             try {
-                await addDoc(messagesCollectionRef, {
+                const messageData = {
                     sender: auth.currentUser.email,
                     text: messageText,
                     timestamp: serverTimestamp(),
+                };
+
+                // Add the message to the messages collection
+                await addDoc(messagesCollectionRef, messageData);
+
+                // Update the chats document with the last message and timestamp
+                await updateDoc(chatRef, {
+                    lastMessage: messageText,
+                    lastMessageAt: serverTimestamp(),
                 });
+
                 messageInput.value = ""; // Clear input after sending
             } catch (error) {
                 console.error("Error sending message:", error);
