@@ -7,8 +7,9 @@ import { browserSessionPersistence, createUserWithEmailAndPassword, getAuth, onA
 const firebaseConfig = {
   apiKey: "AIzaSyBgkWWt1NZL_QWAhsUyxAuF91i5V0P2JHc",
   authDomain: "uchat-d9392.firebaseapp.com",
+  databaseURL: "https://uchat-d9392-default-rtdb.firebaseio.com",
   projectId: "uchat-d9392",
-  storageBucket: "uchat-d9392.appspot.com",
+  storageBucket: "uchat-d9392.firebasestorage.app",
   messagingSenderId: "397312451749",
   appId: "1:397312451749:web:6128f84f311b045f9d194c"
 };

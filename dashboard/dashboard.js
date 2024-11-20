@@ -1,7 +1,7 @@
 // Import the necessary Firebase functions
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { getFirestore, doc, getDoc, collection, getDocs, query, where, updateDoc } from "firebase/firestore"; // Import Firestore functions
+import { getFirestore, doc, getDoc, collection, getDocs, query, where, updateDoc, setDoc, arrayUnion, serverTimestamp, addDoc} from "firebase/firestore"; // Import Firestore functions
 
 
 // Firebase configuration
@@ -208,7 +208,6 @@ const notificationBell = document.getElementById("notificationBell");
 notificationBell.addEventListener("click", () => {
     window.location.href= "/notifications/notifications.html";
 });
-
 // Function to initialize the friends dropdown
 async function initializeFriendsDropdown(user) {
     try {
@@ -236,28 +235,44 @@ async function initializeFriendsDropdown(user) {
         });
 
         // Populate friends list
-        friends.forEach(friend => {
-            const listItem = document.createElement('li');
-            listItem.textContent = friend; // Adjust if friends array contains objects
-            listItem.style.padding = '10px';
-            listItem.style.cursor = 'pointer';
-            listItem.style.borderBottom = '1px solid #ccc';
+        friends.forEach(async (friend) => {
+            // If friend is just an email, fetch the friend's user document to get the uid
+            let friendDocRef;
+            if (typeof friend === 'string') {
+                // Assuming friend is an email
+                friendDocRef = await getDoc(doc(db, "users", friend)); // Fetch the friend document by email
+            } else {
+                friendDocRef = await getDoc(doc(db, "users", friend.uid)); // If friend is an object with uid
+            }
 
-            // Add hover effect
-            listItem.addEventListener('mouseover', () => {
-                listItem.style.backgroundColor = '#f0f0f0';
-            });
-            listItem.addEventListener('mouseout', () => {
-                listItem.style.backgroundColor = '';
-            });
+            if (friendDocRef.exists()) {
+                const friendData = friendDocRef.data();
+                const friendWithUid = { email: friendData.email, uid: friendData.uid };
 
-            // Add click handler to initiate chat
-            listItem.addEventListener('click', () => {
-                alert(`Starting chat with ${friend}`);
-                friendsDropdown.style.display = 'none'; // Hide dropdown
-            });
+                const listItem = document.createElement('li');
+                listItem.textContent = friendWithUid.email; // Display friend's email
+                listItem.style.padding = '10px';
+                listItem.style.cursor = 'pointer';
+                listItem.style.borderBottom = '1px solid #ccc';
 
-            friendsDropdown.appendChild(listItem);
+                // Add hover effect
+                listItem.addEventListener('mouseover', () => {
+                    listItem.style.backgroundColor = '#f0f0f0';
+                });
+                listItem.addEventListener('mouseout', () => {
+                    listItem.style.backgroundColor = '';
+                });
+
+                // Add click handler to initiate chat
+                listItem.addEventListener('click', async () => {
+                    await createNewChat(user, friendWithUid); // Pass friend as an object with email and uid
+                    friendsDropdown.style.display = 'none'; // Hide dropdown after selecting friend
+                });
+
+                friendsDropdown.appendChild(listItem);
+            } else {
+                console.warn("Friend document not found:", friend);
+            }
         });
 
         // Close dropdown when clicking outside
@@ -271,12 +286,79 @@ async function initializeFriendsDropdown(user) {
     }
 }
 
+// Function to create a new chat room
+async function createNewChat(currentUser, friend) {
+    try {
+        if (!currentUser?.uid || !friend?.uid) {
+            console.error("Invalid currentUser or friend");
+            return;
+        }
+
+        // Generate a new chat ID manually
+        const chatId = Math.floor(10000 + Math.random() * 90000).toString();
+        const newChatRef = doc(db, "chats", chatId); // Create a reference for the new chat
+
+        const newChatData = {
+            participants: [currentUser.uid, friend.uid], // Chat participants
+            createdAt: serverTimestamp(), // Chat creation timestamp
+            lastMessage: "Hello, how are you?", // Initial last message
+            lastMessageAt: serverTimestamp() // Timestamp of the last message
+        };
+
+        console.log("New chat data:", newChatData); // Debugging log
+
+        // Use setDoc to create the new chat document
+        await setDoc(newChatRef, newChatData);
+        console.log("New chat created with ID:", chatId);
+
+        // Update the user's document to include the new chat
+        await updateDoc(doc(db, "users", currentUser.uid), {
+            chats: arrayUnion(chatId) // Append the chat ID to the user's list of chats
+        });
+
+        // Update the friend's document if they exist
+        const friendDocRef = doc(db, "users", friend.uid);
+        const friendDoc = await getDoc(friendDocRef);
+        if (friendDoc.exists()) {
+            await updateDoc(friendDocRef, {
+                chats: arrayUnion(chatId) // Append the chat ID to the friend's list of chats
+            });
+        } else {
+            console.warn("Friend document does not exist:", friend.uid);
+        }
+
+        // Step 2: Add messages to the messages subcollection
+        const messagesRef = collection(newChatRef, "messages");
+
+        const message1 = {
+            sender: currentUser.email,
+            text: "Hi!",
+            timestamp: serverTimestamp(),
+            seenBy: [currentUser.email]
+        };
+
+        const message2 = {
+            sender: friend.email,
+            text: "Hello, how are you?",
+            timestamp: serverTimestamp(),
+            seenBy: []
+        };
+
+        // Add the messages
+        await addDoc(messagesRef, message1);
+        await addDoc(messagesRef, message2);
+
+        console.log("Messages added to subcollection!");
+
+    } catch (error) {
+        console.error("Error creating new chat:", error.message);
+    }
+}
+
+
 // Listen for user authentication state changes
 onAuthStateChanged(auth, async (user) => {
     if (user) {
-        console.log("User is logged in:", user);
-
-        // Initialize friends dropdown after ensuring user is logged in
         await initializeFriendsDropdown(user);
 
     } else {
