@@ -1,6 +1,6 @@
-// Import Firebase dependencies
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, getDoc, collection, query, orderBy, getDocs } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, collection, query, where, orderBy, getDocs, onSnapshot, addDoc, serverTimestamp } from "firebase/firestore";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -12,13 +12,14 @@ const firebaseConfig = {
     appId: "1:397312451749:web:6128f84f311b045f9d194c"
 };
 
-// Initialize Firebase and Firestore
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Extract chatId from the URL query string (e.g., /chat.html?chatId=40408)
+// Get the chat ID from the URL
 const urlParams = new URLSearchParams(window.location.search);
-const chatId = urlParams.get('chatId');
+const chatId = urlParams.get('chatId'); // e.g., /chat/?chatId=40408
 
 async function loadChatData() {
     if (!chatId) {
@@ -27,42 +28,56 @@ async function loadChatData() {
     }
 
     try {
-        // Reference to the chat document
         const chatRef = doc(db, "chats", chatId);
-        const chatDoc = await getDoc(chatRef);
+        const messagesCollectionRef = collection(chatRef, "messages");
 
-        if (chatDoc.exists()) {
-            const chatData = chatDoc.data();
-
-            // Fetch messages ordered by timestamp
-            const messagesRef = collection(chatRef, "messages");
-            const messagesQuery = query(messagesRef, orderBy("timestamp"));
+        const renderMessages = async () => {
+            const messagesQuery = query(messagesCollectionRef, orderBy("timestamp"));
             const messagesSnapshot = await getDocs(messagesQuery);
-
             const messages = messagesSnapshot.docs.map(doc => doc.data());
 
-            // Render chat and messages in the UI
-            const chatContainer = document.getElementById("chatContainer");
-            chatContainer.innerHTML = `
-                <h1>Chat with: ${chatData.participants.join(", ")}</h1>
-                <div id="messages">
-                    ${messages.map(msg => `
-                        <p>
-                            <strong>${msg.sender}:</strong> ${msg.text}
-                        </p>
-                    `).join('')}
-                </div>
-            `;
-        } else {
-            console.log("Chat not found!");
-            document.getElementById("chatContainer").innerHTML = `
-                <p>Chat not found. Please check the URL.</p>
-            `;
-        }
+            const messagesContainer = document.getElementById("messages");
+            messagesContainer.innerHTML = messages
+                .map(msg => `<div class="message"><strong>${msg.sender}:</strong> ${msg.text}</div>`)
+                .join('');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight; // Auto-scroll to the bottom
+        };
+
+        // Initial rendering of messages
+        await renderMessages();
+
+        // Real-time updates for new messages
+        onSnapshot(query(messagesCollectionRef, orderBy("timestamp")), (snapshot) => {
+            const messagesContainer = document.getElementById("messages");
+            const messages = snapshot.docs.map(doc => doc.data());
+            messagesContainer.innerHTML = messages
+                .map(msg => `<div class="message"><strong>${msg.sender}:</strong> ${msg.text}</div>`)
+                .join('');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight; // Auto-scroll
+        });
+
+        // Send message functionality
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+
+        sendButton.addEventListener("click", async () => {
+            const messageText = messageInput.value.trim();
+            if (messageText === "") return;
+
+            try {
+                await addDoc(messagesCollectionRef, {
+                    sender: auth.currentUser.email,
+                    text: messageText,
+                    timestamp: serverTimestamp(),
+                });
+                messageInput.value = ""; // Clear input after sending
+            } catch (error) {
+                console.error("Error sending message:", error);
+            }
+        });
     } catch (error) {
         console.error("Error loading chat data:", error);
     }
 }
 
-// Load chat data on page load
-document.addEventListener("DOMContentLoaded", loadChatData);
+loadChatData();

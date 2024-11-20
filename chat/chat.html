@@ -1,15 +1,19 @@
-<!-- chat.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
+    <link rel="stylesheet" href="chat.css">
+
 </head>
 <body>
     <div id="chatContainer">
-        <h1>Chat Room</h1>
         <div id="messages"></div>
+        <div id="messageInputContainer">
+            <input type="text" id="messageInput" placeholder="Type your message here..." />
+            <button id="sendButton">Send</button>
+        </div>
     </div>
     <script src="../dist/chat.bundle.js"></script>
 </body>
