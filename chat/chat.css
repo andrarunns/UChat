@@ -103,3 +103,252 @@ body {
 #sendButton:hover {
     background-color: #d35b5b;
 }
+
+
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Dosis', sans-serif;
+}
+
+/* Full viewport height for body */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    background-color: #f4f4f9;
+    position: relative;
+    padding-top: 100px; /* Added padding to avoid overlap with the top banner */
+}
+
+/* Top Banner Styling */
+.topBanner {
+    width: 100%;
+    height: 100px;
+    padding: 10px 20px;
+    background-color: #2b3030;
+    display: flex;
+    justify-content: space-between; /* Updated for centered content */
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 20px; /* Padding on the top and sides */
+}
+
+.topBanner h1 {
+    color: orange;
+    font-size: 70px;
+    font-weight: bold;
+    margin-right: 10px; /* Added some margin for spacing */
+}
+
+/* Adjusting the pickaxe image next to the title */
+.topBanner img.pickaxe {
+    height: 60px;
+    width: auto;
+}
+
+/* Add buttons to the top banner */
+.topBannerButtons {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;  /* Move the buttons to the right side */
+}
+
+button {
+    background-color: orange;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #b08b05;
+}
+
+#newChat {
+    background-color: orange;
+    color: white; /* Ensure text color stays white */
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+}
+
+#newChat:hover {
+    background-color: #ff7f00; /* Darker orange for hover effect */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+
+#signOutButton {
+    background-color: rgba(8, 8, 98, 1); /* Original background color */
+    color: white; /* Text color remains white */
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for both background and scale */
+}
+
+#signOutButton:hover {
+    background-color: rgba(8, 8, 98, 0.8); /* Darker shade for hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+#signOut:hover{
+    background-color: #b08b05;
+}
+
+/* Centered Search Bar and Alert Icon */
+.searchContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align to the left */
+    width: 50%;
+    margin-left: 150px; /* Move search bar to the right */
+    margin-right: auto; /* Center it within the banner */
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: none;
+    font-size: 14px;
+    margin-right: 10px; /* Add margin between search bar and notification icon */
+}
+
+#notificationBell {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    position: relative;
+}
+
+#notificationDot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 8px;
+    width: 8px;
+    background-color: red;
+    border-radius: 50%;
+    display: none;
+}
+
+/* Modal for Add Friend */
+#addFriendModal {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+}
+
+.modal-content button {
+    background-color: #0177ff;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+    body {
+        padding-top: 50px; /* Adjust for mobile view */
+    }
+
+    .topBanner h1 {
+        font-size: 35px;
+    }
+
+    .topBanner img.pickaxe {
+        height: 40px;
+    }
+
+    .searchContainer {
+        width: 80%;
+    }
+
+    .loginContainer {
+        width: 80%;
+    }
+}
+
+
+/* Styling for chat items */
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 25px;
+    width: 1200px;
+    margin: 10px 0;
+    border-radius: 15px;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Dosis', sans-serif;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.chat-item:hover {
+    background-color: #eaeaea;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Optional: Add icons or avatars to chat items */
+.chat-item .chat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ddd;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #555;
+}
+
+/* Adjust the chat list */
+#chatList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}

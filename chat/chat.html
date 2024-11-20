@@ -11,14 +11,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="chat.css">
-
 </head>
 <body>
 
     <!-- Top Banner Section -->
     <div class="topBanner">
-        <h1>UChat</h1>
+        <a href="/dashboard/dashboard.html" style="text-decoration: none; color: inherit;">
+            <h1>UChat</h1>
+        </a>
         <img src="/dist/pickaxe.png" alt="Pickaxe Icon" class="pickaxe">
+
+        <!-- Search Bar inside the top banner -->
+        <div class="searchContainer">
+            <input type="text" placeholder="Search..." />
+            <button id="notificationBell">
+                <span style="font-size: 20px;">🔔</span>
+                <span id="notificationDot"></span>
+            </button>
+        </div>
+
+        <!-- Buttons inside the top banner -->
+        <div class="topBannerButtons">
+            <button id="addFriendButton">+ Add Friend</button>
+            <button id="newChat">+ New Chat</button>
+            <ul id="friendsDropdown" style="display: none;"></ul>
+
+            <button id="signOutButton">Sign Out</button>
+        </div>
     </div>
 
     <!-- Chat Container Section -->

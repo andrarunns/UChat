@@ -100,9 +100,7 @@ async function fetchUserConversations() {
                         listItem.className = "chat-item";
                         
                         // Add a click listener to open the chat or navigate
-                        listItem.addEventListener('click', () => {
-                            alert(`Opening chat with: ${fullName}`);
-                            
+                        listItem.addEventListener('click', () => {                            
                             window.location.href = `/chat/chat.html?chatId=${chatDoc.id}`;
                             
                         });
@@ -365,7 +363,7 @@ async function createNewChat(currentUser, friend) {
         });
 
         if (existingChatId) {
-            console.log("Chat already exists with ID:", existingChatId);
+            alert("Chat already exists!")
             // Redirect the user to the existing chat page
             window.location.href = `/chat/chat.html?chatId=${existingChatId}`;
             return;
