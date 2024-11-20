@@ -4,7 +4,8 @@ module.exports = {
   entry: {
     login: './src/index.js',   // Entry point for login page
     dashboard: './dashboard/dashboard.js',  // Entry point for dashboard page
-    notifiations: './notifications/notifications.js'
+    notifiations: './notifications/notifications.js',
+    chat: './chat/chat.js'
   },
   output: {
     filename: '[name].bundle.js',  // This will create 'login.bundle.js' and 'dashboard.bundle.js'

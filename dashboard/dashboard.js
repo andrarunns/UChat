@@ -265,8 +265,16 @@ async function initializeFriendsDropdown(user) {
 
                 // Add click handler to initiate chat
                 listItem.addEventListener('click', async () => {
-                    await createNewChat(user, friendWithUid); // Pass friend as an object with email and uid
+                    const chatId = await createNewChat(user, friendWithUid); // Pass friend as an object with email and uid
                     friendsDropdown.style.display = 'none'; // Hide dropdown after selecting friend
+                    
+                    if (chatId) {
+                        // Redirect to the new chat room using the chatId
+                        console.log("aj andrea")
+                        //window.location.href = `/chat/${chatId}`;  // Adjust the URL structure based on your routing setup
+                        // Redirect the user to the chat page
+                        //window.location.href = `/chat.html?chatId=${chatId}`;
+                    }
                 });
 
                 friendsDropdown.appendChild(listItem);
@@ -285,7 +293,6 @@ async function initializeFriendsDropdown(user) {
         console.error("Error fetching user document:", error);
     }
 }
-
 // Function to create a new chat room
 async function createNewChat(currentUser, friend) {
     try {
@@ -350,10 +357,16 @@ async function createNewChat(currentUser, friend) {
 
         console.log("Messages added to subcollection!");
 
+        // Redirect the user to the chat page
+        window.location.href = `/chat/chat.html?chatId=${chatId}`;
+       
+        
+
     } catch (error) {
         console.error("Error creating new chat:", error.message);
     }
 }
+
 
 
 // Listen for user authentication state changes
