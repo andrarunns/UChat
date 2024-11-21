@@ -1,46 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Notifications</title>
-    <link rel="stylesheet" href="notifications.css">
-</head>
-<body>
-   <!-- Top Banner Section -->
-   <div class="topBanner">
-    <a href="/dashboard/dashboard.html" style="text-decoration: none; color: inherit;">
+    <link rel="stylesheet" href="notifications.css" />
+  </head>
+  <body>
+    <!-- Top Banner Section -->
+    <div class="topBanner">
+      <a
+        href="/dashboard/dashboard.html"
+        style="text-decoration: none; color: inherit"
+      >
         <h1>UChat</h1>
-    </a>
-    <img src="/dist/pickaxe.png" alt="Pickaxe Icon" class="pickaxe">
+      </a>
+      <img src="/dist/pickaxe.png" alt="Pickaxe Icon" class="pickaxe" />
 
-    <!-- Search Bar inside the top banner -->
-    <div class="searchContainer">
+      <!-- Search Bar inside the top banner -->
+      <div class="searchContainer">
         <input type="text" placeholder="Search..." />
         <button id="notificationBell">
-            <span style="font-size: 20px;">🔔</span>
-            <span id="notificationDot"></span>
+          <span style="font-size: 20px">🔔</span>
+          <span id="notificationDot"></span>
         </button>
-    </div>
+      </div>
 
-    <!-- Buttons inside the top banner -->
-    <div class="topBannerButtons">
+      <!-- Buttons inside the top banner -->
+      <div class="topBannerButtons">
         <button id="signOutButton">Sign Out</button>
+      </div>
     </div>
-</div>
 
     <table id="notificationsTable">
-        <thead>
-            <tr>
-                <th>Notification</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Friend requests will be dynamically added here -->
-        </tbody>
+      <thead>
+        <tr>
+          <th>Notification</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Friend requests will be dynamically added here -->
+      </tbody>
     </table>
 
     <script src="../dist/notifiations.bundle.js"></script>
-</body>
+  </body>
 </html>

@@ -1,60 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Messaging Page</title>
 
     <!-- Google Fonts and FontAwesome -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel=" stylesheet" href= "messagingDashboard.css">
-</head>
-<body>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel=" stylesheet" href="messagingDashboard.css" />
+  </head>
+  <body>
     <!-- Top Banner Section -->
     <div class="topBanner">
-        <h1>UChat</h1>
-        <img src="/dist/pickaxe.png" alt="Pickaxe Icon" class="pickaxe">
+      <h1>UChat</h1>
+      <img src="/dist/pickaxe.png" alt="Pickaxe Icon" class="pickaxe" />
 
-        <!-- Search Bar inside the top banner -->
-        <div class="searchContainer">
-            <input type="text" placeholder="Search..." />
-            <button id="notificationBell">
-                <span style="font-size: 20px;">🔔</span>
-                <span id="notificationDot"></span>
-            </button>
-        </div>
+      <!-- Search Bar inside the top banner -->
+      <div class="searchContainer">
+        <input type="text" placeholder="Search..." />
+        <button id="notificationBell">
+          <span style="font-size: 20px">🔔</span>
+          <span id="notificationDot"></span>
+        </button>
+      </div>
 
-        <!-- Buttons inside the top banner -->
-        <div class="topBannerButtons">
-            <button id="addFriendButton">+ Add Friend</button>
-            <button id="newChat">+ New Chat</button>
-            <ul id="friendsDropdown" style="display: none;"></ul>
+      <!-- Buttons inside the top banner -->
+      <div class="topBannerButtons">
+        <button id="addFriendButton">+ Add Friend</button>
+        <button id="newChat">+ New Chat</button>
+        <ul id="friendsDropdown" style="display: none"></ul>
 
-            
-            <button id="signOutButton">Sign Out</button>
-        </div>
+        <button id="signOutButton">Sign Out</button>
+      </div>
     </div>
 
     <!-- Display Section -->
     <div id="display">
-        <ul id="chatList"></ul> <!-- List to hold chat items -->
+      <ul id="chatList"></ul>
+      <!-- List to hold chat items -->
     </div>
-
 
     <!-- Add Friend Modal -->
     <div id="addFriendModal">
-        <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
-            <h3>Add a Friend</h3>
-            <input type="text" id="friendEmail" placeholder="Enter friend's email" />
-            <button id="sendFriendRequest">Send Request</button>
-        </div>
+      <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h3>Add a Friend</h3>
+        <input
+          type="text"
+          id="friendEmail"
+          placeholder="Enter friend's email"
+        />
+        <button id="sendFriendRequest">Send Request</button>
+      </div>
     </div>
 
     <script src="../dist/dashboard.bundle.js"></script>
-</body>
+  </body>
 </html>
