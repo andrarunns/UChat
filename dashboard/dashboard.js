@@ -15,6 +15,8 @@ import {
   serverTimestamp,
   addDoc,
 } from "firebase/firestore"; // Import Firestore functions
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 
 // Firebase configuration
 const firebaseConfig = {
@@ -30,6 +32,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app); // Initialize Firestore
+const storage = getStorage(app);
+
 
 // Automatically fetch user conversations when the page loads
 document.addEventListener("DOMContentLoaded", () => {
@@ -48,58 +52,49 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// Function to get the current user's conversations
-async function fetchUserConversations() {
-  const user = auth.currentUser; // Get the current logged-in user
 
+async function fetchUserConversations() {
+  const user = auth.currentUser;
   if (!user) {
     console.log("No user is logged in.");
     return;
   }
 
   try {
-    // Access the current user's document in Firestore
     const userDocRef = doc(db, "users", user.uid);
     const userDocSnapshot = await getDoc(userDocRef);
-
+    
     if (!userDocSnapshot.exists()) {
       console.log("User document not found");
       return;
     }
 
-    // Access the conversations array
     const userData = userDocSnapshot.data();
     const conversations = userData.chats || [];
-
+    
     if (conversations.length === 0) {
       console.log("No conversations available for this user.");
       return;
     }
 
-    // Get the conversations container in the DOM
     const conversationsContainer = document.getElementById("chatList");
-    conversationsContainer.innerHTML = ""; // Clear any existing content
+    conversationsContainer.innerHTML = "";
 
-    // Fetch the conversations from Firestore 'chats' collection
     const conversationsRef = collection(db, "chats");
     const querySnapshot = await getDocs(conversationsRef);
 
     querySnapshot.forEach(async (chatDoc) => {
       if (conversations.includes(chatDoc.id)) {
         const chatData = chatDoc.data();
-
-        // Filter out the currently logged-in user from the participants
         const otherUsers = chatData.participants.filter(
           (participant) => participant !== user.uid
         );
 
-        // Display each other user in the chat
         otherUsers.forEach(async (otherUserId) => {
           try {
-            // Fetch user details from Firestore
             const userDocRef = doc(db, "users", otherUserId);
             const userDocSnapshot = await getDoc(userDocRef);
-
+            
             if (!userDocSnapshot.exists()) {
               console.log(`User document not found for ID: ${otherUserId}`);
               return;
@@ -108,22 +103,31 @@ async function fetchUserConversations() {
             const otherUserData = userDocSnapshot.data();
             const fullName = `${otherUserData.firstname} ${otherUserData.lastname}`;
 
-            // Create the list item
+            // Create the list item with avatar and text
             const listItem = document.createElement("li");
-            listItem.textContent = `${fullName}: ${chatData.lastMessage}`; // Display the full name
             listItem.className = "chat-item";
 
-            // Add a click listener to open the chat or navigate
+            // Create avatar
+            const avatar = document.createElement("img");
+            avatar.src = otherUserData.profilePicture || "/dist/defaultprofile.png";
+            avatar.className = "chat-avatar";
+
+            // Create text container
+            const textContainer = document.createElement("div");
+            textContainer.className = "chat-text";
+            textContainer.textContent = `${fullName}: ${chatData.lastMessage}`;
+
+            // Assemble the elements
+            listItem.appendChild(avatar);
+            listItem.appendChild(textContainer);
+
             listItem.addEventListener("click", () => {
               window.location.href = `/chat/chat.html?chatId=${chatDoc.id}`;
             });
 
-            conversationsContainer.appendChild(listItem); // Append to the container
+            conversationsContainer.appendChild(listItem);
           } catch (error) {
-            console.error(
-              `Error fetching user details for ID: ${otherUserId}`,
-              error
-            );
+            console.error(`Error fetching user details for ID: ${otherUserId}`, error);
           }
         });
       }
@@ -155,12 +159,14 @@ if (signOutButton) {
   });
 }
 
+
 const addFriendModal = document.getElementById("addFriendModal");
 const addFriendButton = document.getElementById("addFriendButton");
 const closeModal = document.getElementById("closeModal");
 
 // Show modal on "Add Friend" button click
 addFriendButton.addEventListener("click", () => {
+  console.log("Profile button clicked");
   addFriendModal.style.display = "flex";
 });
 
@@ -175,6 +181,102 @@ window.addEventListener("click", (event) => {
     addFriendModal.style.display = "none";
   }
 });
+
+const addProfileModal = document.getElementById("addProfileModal");
+const profilePictureButton = document.getElementById("profilePictureButton");
+const closeProfileModal = document.getElementById("closeProfileModal");
+const uploadProfilePicture = document.getElementById("uploadProfilePicture");
+const profilePictureInput = document.getElementById("profilePictureInput");
+const selectImageBtn = document.getElementById("selectImageBtn");
+const imagePreview = document.getElementById("imagePreview");
+
+// Show modal
+profilePictureButton.addEventListener("click", () => {
+    addProfileModal.style.display = "flex";
+});
+
+// Close modal
+closeProfileModal.addEventListener("click", () => {
+    addProfileModal.style.display = "none";
+    resetUploadForm();
+});
+
+// Close on outside click
+window.addEventListener("click", (event) => {
+    if (event.target == addProfileModal) {
+        addProfileModal.style.display = "none";
+        resetUploadForm();
+    }
+});
+
+// Trigger file input when select button is clicked
+selectImageBtn.addEventListener("click", () => {
+    profilePictureInput.click();
+});
+
+// Handle file selection
+profilePictureInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        uploadProfilePicture.disabled = false;
+    }
+});
+
+// Handle file upload
+uploadProfilePicture.addEventListener("click", async () => {
+    const file = profilePictureInput.files[0];
+    if (!file) {
+        alert("Please select a file first");
+        return;
+    }
+
+    try {
+        // Show loading state
+        uploadProfilePicture.disabled = true;
+        uploadProfilePicture.textContent = "Uploading...";
+
+        const user = auth.currentUser;
+        const storageRef = ref(storage, `profilePictures/${user.uid}`);
+        
+        // Upload file
+        await uploadBytes(storageRef, file);
+        
+        // Get download URL
+        const downloadURL = await getDownloadURL(storageRef);
+        
+        // Update user's profile in Firestore
+        const userRef = doc(db, "users", user.uid);
+        await updateDoc(userRef, {
+            profilePicture: downloadURL
+        });
+
+        alert("Profile picture updated successfully!");
+        addProfileModal.style.display = "none";
+        resetUploadForm();
+    } catch (error) {
+        console.error("Error uploading file:", error);
+        alert("Error uploading file. Please try again.");
+        uploadProfilePicture.disabled = false;
+        uploadProfilePicture.textContent = "Upload Picture";
+    }
+});
+
+// Reset form helper
+function resetUploadForm() {
+    imagePreview.src = "/dist/default-avatar.png";
+    profilePictureInput.value = "";
+    uploadProfilePicture.disabled = true;
+    uploadProfilePicture.textContent = "Upload Picture";
+}
+
+
+
+
 // Function to search for the user's email in Firestore and send a friend request
 async function searchForUserEmail() {
   const emailInput = document.getElementById("friendEmail").value.trim(); // Get email from the correct input
@@ -443,3 +545,7 @@ onAuthStateChanged(auth, async (user) => {
     console.log("No user is logged in. allegedly");
   }
 });
+
+
+
+
