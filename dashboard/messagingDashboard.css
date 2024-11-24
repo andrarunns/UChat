@@ -243,3 +243,142 @@ input[type="text"] {
   padding: 0;
   margin: 0;
 }
+#friendsDropdown {
+  position: absolute; /* Position relative to the parent */
+  top: 60px; /* Adjust based on the height of the topBanner */
+  left: 50%; /* Align roughly below the "New Chat" button */
+  transform: translateX(-50%); /* Center it horizontally */
+  background: white; /* Dropdown background */
+  border: 1px solid #ccc; /* Optional: Add a border */
+  list-style-type: none; /* Remove bullet points */
+  padding: 10px;
+  display: none; /* Hidden by default */
+  z-index: 1000; /* Ensure it appears above other elements */
+}
+
+
+#friendsDropdown li {
+  padding: 10px;
+  cursor: pointer;
+  list-style: none;
+  border-bottom: 1px solid #eee;
+}
+
+#friendsDropdown li:hover {
+  background-color: #f0f0f0;
+}
+
+#friendsDropdown li:last-child {
+  border-bottom: none;
+}
+/* New Group Chat Modal Styling */
+#newGroupChatModal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1; /* On top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+}
+
+/* Modal Content */
+#newGroupChatModal .modal-content {
+  background-color: white;
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 50%; /* Adjust width as necessary */
+}
+
+/* Close Button */
+#newGroupChatModal .close {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  float: right;
+}
+
+/* Close Button Hover */
+#newGroupChatModal .close:hover,
+#newGroupChatModal .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Input Fields Styling */
+#newGroupChatModal input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Button Styling */
+#newGroupChatModal button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#newGroupChatModal button:hover {
+  background-color: #45a049;
+}
+/* Styling for Friends Selection in Modal */
+#friendsSelectionContainer {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Styling for the friends list container */
+#friendsList {
+  height: 300px; /* Increase the height to allow more space for friends */
+  overflow-y: auto; /* Add scrolling if the list overflows */
+  padding: 10px; /* Add some padding around the list */
+  font-size: 16px; /* Make the font size a little larger */
+  border: 1px solid #ccc; /* Add a border around the list */
+  background-color: #f4f4f9; /* Use a lighter background color to ensure visibility */
+  border-radius: 8px; /* Optional: add rounded corners */
+  color: black; /* Ensure that the text is black */
+}
+
+/* Style for individual list items */
+#friendsList li {
+  padding: 8px;
+  cursor: pointer; /* Change cursor to indicate clickable items */
+  color: black; /* Set font color to black */
+  background-color: #fff; /* Make sure list items have white background */
+  border-radius: 5px; /* Optional: rounded corners for the list items */
+  transition: background-color 0.2s ease; /* Smooth background color transition */
+}
+
+#friendsList li.selected {
+  background-color: #cce5ff; /* Highlight selected items */
+}
+
+/* Hover effect on list items */
+#friendsList li:hover {
+  background-color: #ddd; /* Light hover effect for better user experience */
+}
+
+
+/* Button Styling */
+#newGroupChatModal button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#newGroupChatModal button:hover {
+  background-color: #45a049;
+}
