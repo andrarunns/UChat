@@ -17,6 +17,7 @@ import {
   writeBatch,
 } from "firebase/firestore"; // Import Firestore functions
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { onSnapshot } from "firebase/firestore";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -153,9 +154,22 @@ async function fetchUserConversations() {
               textContainer.className = "chat-text";
               textContainer.textContent = `${fullName}: ${chatData.lastMessage}`;
 
+              // Create status indicator
+              const statusDot = document.createElement("div");
+              statusDot.className = "status-indicator";
+              if (otherUserData.lastSeen) {
+                const lastSeenTime = otherUserData.lastSeen.toDate();
+                const timeDiff = Date.now() - lastSeenTime;
+                // Consider user online if last seen within last 2 minutes
+                if (timeDiff < 120000) { // 2 minutes in milliseconds
+                  statusDot.classList.add("online");
+                }
+              }
+
               // Assemble the elements
               listItem.appendChild(avatar);
               listItem.appendChild(textContainer);
+              listItem.appendChild(statusDot);
 
               // Add a click listener to open the chat or navigate
               listItem.addEventListener("click", () => {
@@ -178,7 +192,6 @@ async function fetchUserConversations() {
     console.error("Error fetching conversations:", error);
   }
 }
-
 // Sign Out Functionality
 const signOutButton = document.getElementById("signOutButton");
 if (signOutButton) {
@@ -787,3 +800,18 @@ document
       alert("Error resetting password. Please try again.");
     }
   });
+
+  // Add this function to update user's status
+async function updateOnlineStatus() {
+  const user = auth.currentUser;
+  if (user) {
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, {
+          lastSeen: serverTimestamp()
+      });
+  }
+}
+
+setInterval(updateOnlineStatus, 60000);
+document.addEventListener('DOMContentLoaded', updateOnlineStatus);
+window.addEventListener('beforeunload', updateOnlineStatus);
