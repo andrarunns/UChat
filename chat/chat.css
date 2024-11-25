@@ -349,3 +349,34 @@ input[type="text"] {
   padding: 0;
   margin: 0;
 }
+
+.message-image {
+  max-width: 200px;
+  max-height: 200px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* Hide the default file input */
+#fileInput {
+  display: none; /* Hide the default file input */
+}
+
+/* Style the custom file input to look like the send button */
+.fileInputWrapper {
+  display: inline-block;
+  cursor: pointer;
+  background-color: orange;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  text-align: center;
+  width: 15%;
+  transition: background-color 0.3s;
+}
+
+.fileInputWrapper:hover {
+  background-color: #d35b5b;
+}
