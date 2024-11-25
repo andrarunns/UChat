@@ -15,6 +15,7 @@ import {
   serverTimestamp,
   addDoc,
   writeBatch,
+  sendPasswordResetEmail,
 } from "firebase/firestore"; // Import Firestore functions
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -120,58 +121,57 @@ async function fetchUserConversations() {
 
           otherUsers.forEach(async (otherUserId) => {
             try {
-                // Fetch user details from Firestore
-                const userDocRef = doc(db, "users", otherUserId);
-                const userDocSnapshot = await getDoc(userDocRef);
-        
-                if (!userDocSnapshot.exists()) {
-                    console.log(`User document not found for ID: ${otherUserId}`);
-                    return;
-                }
-        
-                const otherUserData = userDocSnapshot.data();
-                const fullName = `${otherUserData.firstname} ${otherUserData.lastname}`;
-        
-                // Create the list item
-                const listItem = document.createElement("li");
-                listItem.className = "chat-item";
-        
-                // Create avatar image element
-                const avatar = document.createElement("img");
-        
-                // Check if the user has a profilePicUrl
-                if (otherUserData.profilePicUrl) {
-                    avatar.src = otherUserData.profilePicUrl; // Use the profile picture URL if available
-                } else {
-                    avatar.src = "/dist/defaultprofile.png"; // Use default image if no profilePicUrl
-                }
-        
-                avatar.className = "chat-avatar";
-        
-                // Create text container for the full name and last message
-                const textContainer = document.createElement("div");
-                textContainer.className = "chat-text";
-                textContainer.textContent = `${fullName}: ${chatData.lastMessage}`;
-        
-                // Assemble the elements
-                listItem.appendChild(avatar);
-                listItem.appendChild(textContainer);
-        
-                // Add a click listener to open the chat or navigate
-                listItem.addEventListener("click", () => {
-                    window.location.href = `/chat/chat.html?chatId=${chatDoc.id}`;
-                });
-        
-                // Append the list item to the conversations container
-                conversationsContainer.appendChild(listItem);
+              // Fetch user details from Firestore
+              const userDocRef = doc(db, "users", otherUserId);
+              const userDocSnapshot = await getDoc(userDocRef);
+
+              if (!userDocSnapshot.exists()) {
+                console.log(`User document not found for ID: ${otherUserId}`);
+                return;
+              }
+
+              const otherUserData = userDocSnapshot.data();
+              const fullName = `${otherUserData.firstname} ${otherUserData.lastname}`;
+
+              // Create the list item
+              const listItem = document.createElement("li");
+              listItem.className = "chat-item";
+
+              // Create avatar image element
+              const avatar = document.createElement("img");
+
+              // Check if the user has a profilePicUrl
+              if (otherUserData.profilePicUrl) {
+                avatar.src = otherUserData.profilePicUrl; // Use the profile picture URL if available
+              } else {
+                avatar.src = "/dist/defaultprofile.png"; // Use default image if no profilePicUrl
+              }
+
+              avatar.className = "chat-avatar";
+
+              // Create text container for the full name and last message
+              const textContainer = document.createElement("div");
+              textContainer.className = "chat-text";
+              textContainer.textContent = `${fullName}: ${chatData.lastMessage}`;
+
+              // Assemble the elements
+              listItem.appendChild(avatar);
+              listItem.appendChild(textContainer);
+
+              // Add a click listener to open the chat or navigate
+              listItem.addEventListener("click", () => {
+                window.location.href = `/chat/chat.html?chatId=${chatDoc.id}`;
+              });
+
+              // Append the list item to the conversations container
+              conversationsContainer.appendChild(listItem);
             } catch (error) {
-                console.error(
-                    `Error fetching user details for ID: ${otherUserId}`,
-                    error
-                );
+              console.error(
+                `Error fetching user details for ID: ${otherUserId}`,
+                error
+              );
             }
-        });
-        
+          });
         }
       }
     });
@@ -756,3 +756,24 @@ function resetUploadForm() {
   uploadProfilePicture.disabled = true; // disable upload button until a file is selected
   uploadProfilePicture.textContent = "Upload Picture"; // reset button text
 }
+
+// Handle reset password
+document
+  .getElementById("resetPasswordButton")
+  .addEventListener("click", async () => {
+    const user = auth.currentUser; // Get the current logged-in user
+    if (!user) {
+      alert("You must be logged in to reset your password.");
+      return;
+    }
+
+    const email = user.email;
+
+    try {
+      await sendPasswordResetEmail(email);
+      alert("Password reset email sent! Please check your inbox.");
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      alert("Error resetting password. Please try again.");
+    }
+  });
