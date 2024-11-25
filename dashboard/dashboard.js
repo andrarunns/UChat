@@ -35,7 +35,6 @@ const auth = getAuth(app);
 const db = getFirestore(app); // Initialize Firestore
 const storage = getStorage(app);
 
-
 // Automatically fetch user conversations when the page loads
 document.addEventListener("DOMContentLoaded", () => {
   onAuthStateChanged(auth, async (user) => {
@@ -53,34 +52,38 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
+// Function to get the current user's conversations
 async function fetchUserConversations() {
-  const user = auth.currentUser;
+  const user = auth.currentUser; // Get the current logged-in user
+
   if (!user) {
     console.log("No user is logged in.");
     return;
   }
 
   try {
+    // Access the current user's document in Firestore
     const userDocRef = doc(db, "users", user.uid);
     const userDocSnapshot = await getDoc(userDocRef);
-    
+
     if (!userDocSnapshot.exists()) {
       console.log("User document not found");
       return;
     }
 
+    // Access the conversations array
     const userData = userDocSnapshot.data();
     const conversations = userData.chats || [];
-    
+
     if (conversations.length === 0) {
       console.log("No conversations available for this user.");
       return;
     }
     // Get the conversations container in the DOM
     const conversationsContainer = document.getElementById("chatList");
-    conversationsContainer.innerHTML = "";
+    conversationsContainer.innerHTML = ""; // Clear any existing content
 
+    // Fetch the conversations from Firestore 'chats' collection
     const conversationsRef = collection(db, "chats");
     const querySnapshot = await getDocs(conversationsRef);
       console.log(conversations);
@@ -91,29 +94,49 @@ async function fetchUserConversations() {
     querySnapshot.forEach(async (chatDoc) => {
       if (conversations.includes(chatDoc.id)) {
         const chatData = chatDoc.data();
-        const otherUsers = chatData.participants.filter(
-          (participant) => participant !== user.uid
-        );
-
-        otherUsers.forEach(async (otherUserId) => {
-          try {
-            const userDocRef = doc(db, "users", otherUserId);
-            const userDocSnapshot = await getDoc(userDocRef);
-            
-            if (!userDocSnapshot.exists()) {
-              console.log(`User document not found for ID: ${otherUserId}`);
-              return;
-            }
-
-            const otherUserData = userDocSnapshot.data();
-            const fullName = `${otherUserData.firstname} ${otherUserData.lastname}`;
-
-            // Create the list item with avatar and text
-            const listItem = document.createElement("li");
-            listItem.className = "chat-item";
-
-            // Create avatar
-            const avatar = document.createElement("img");
+        console.log(chatData);
+        // Check if it's a group chat
+        if (chatData.name) {
+          console.log("entra");
+          // It's a group chat
+          const groupName = chatData.name;
+          
+          // Create the list item
+          const listItem = document.createElement("li");
+          listItem.textContent = `${groupName}: ${chatData.lastMessage}`; // Display group name and last message
+          listItem.className = "chat-item";
+    
+          // Add a click listener to open the chat or navigate
+          listItem.addEventListener("click", () => {
+            window.location.href = `/chat/chat.html?chatId=${chatDoc.id}`;
+          });
+    
+          conversationsContainer.appendChild(listItem); // Append to the container
+        } else {
+          // It's an individual chat
+          const otherUsers = chatData.participants.filter(
+            (participant) => participant !== user.uid
+          );
+    
+          otherUsers.forEach(async (otherUserId) => {
+            try {
+              // Fetch user details from Firestore
+              const userDocRef = doc(db, "users", otherUserId);
+              const userDocSnapshot = await getDoc(userDocRef);
+    
+              if (!userDocSnapshot.exists()) {
+                console.log(`User document not found for ID: ${otherUserId}`);
+                return;
+              }
+    
+              const otherUserData = userDocSnapshot.data();
+              const fullName = `${otherUserData.firstname} ${otherUserData.lastname}`;
+    
+              // Create the list item
+              const listItem = document.createElement("li");
+              // listItem.textContent = `${fullName}: ${chatData.lastMessage}`; // Display the full name and last message
+              listItem.className = "chat-item";
+              const avatar = document.createElement("img");
             avatar.src = otherUserData.profilePicture || "/dist/defaultprofile.png";
             avatar.className = "chat-avatar";
 
@@ -126,15 +149,21 @@ async function fetchUserConversations() {
             listItem.appendChild(avatar);
             listItem.appendChild(textContainer);
 
-            listItem.addEventListener("click", () => {
-              window.location.href = `/chat/chat.html?chatId=${chatDoc.id}`;
-            });
-
-            conversationsContainer.appendChild(listItem);
-          } catch (error) {
-            console.error(`Error fetching user details for ID: ${otherUserId}`, error);
-          }
-        });
+    
+              // Add a click listener to open the chat or navigate
+              listItem.addEventListener("click", () => {
+                window.location.href = `/chat/chat.html?chatId=${chatDoc.id}`;
+              });
+    
+              conversationsContainer.appendChild(listItem); // Append to the container
+            } catch (error) {
+              console.error(
+                `Error fetching user details for ID: ${otherUserId}`,
+                error
+              );
+            }
+          });
+        }
       }
     });    
   } catch (error) {
@@ -142,11 +171,6 @@ async function fetchUserConversations() {
   }
 }
 
-// Helper function to display messages in the chat list container
-function displayMessage(message) {
-  const conversationsContainer = document.getElementById("chatList");
-  conversationsContainer.innerHTML = `<li>${message}</li>`;
-}
 
 // Sign Out Functionality
 const signOutButton = document.getElementById("signOutButton");
@@ -164,14 +188,12 @@ if (signOutButton) {
   });
 }
 
-
 const addFriendModal = document.getElementById("addFriendModal");
 const addFriendButton = document.getElementById("addFriendButton");
 const closeModal = document.getElementById("closeModal");
 
 // Show modal on "Add Friend" button click
 addFriendButton.addEventListener("click", () => {
-  console.log("Profile button clicked");
   addFriendModal.style.display = "flex";
 });
 
@@ -186,102 +208,6 @@ window.addEventListener("click", (event) => {
     addFriendModal.style.display = "none";
   }
 });
-
-const addProfileModal = document.getElementById("addProfileModal");
-const profilePictureButton = document.getElementById("profilePictureButton");
-const closeProfileModal = document.getElementById("closeProfileModal");
-const uploadProfilePicture = document.getElementById("uploadProfilePicture");
-const profilePictureInput = document.getElementById("profilePictureInput");
-const selectImageBtn = document.getElementById("selectImageBtn");
-const imagePreview = document.getElementById("imagePreview");
-
-// Show modal
-profilePictureButton.addEventListener("click", () => {
-    addProfileModal.style.display = "flex";
-});
-
-// Close modal
-closeProfileModal.addEventListener("click", () => {
-    addProfileModal.style.display = "none";
-    resetUploadForm();
-});
-
-// Close on outside click
-window.addEventListener("click", (event) => {
-    if (event.target == addProfileModal) {
-        addProfileModal.style.display = "none";
-        resetUploadForm();
-    }
-});
-
-// Trigger file input when select button is clicked
-selectImageBtn.addEventListener("click", () => {
-    profilePictureInput.click();
-});
-
-// Handle file selection
-profilePictureInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            imagePreview.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-        uploadProfilePicture.disabled = false;
-    }
-});
-
-// Handle file upload
-uploadProfilePicture.addEventListener("click", async () => {
-    const file = profilePictureInput.files[0];
-    if (!file) {
-        alert("Please select a file first");
-        return;
-    }
-
-    try {
-        // Show loading state
-        uploadProfilePicture.disabled = true;
-        uploadProfilePicture.textContent = "Uploading...";
-
-        const user = auth.currentUser;
-        const storageRef = ref(storage, `profilePictures/${user.uid}`);
-        
-        // Upload file
-        await uploadBytes(storageRef, file);
-        
-        // Get download URL
-        const downloadURL = await getDownloadURL(storageRef);
-        
-        // Update user's profile in Firestore
-        const userRef = doc(db, "users", user.uid);
-        await updateDoc(userRef, {
-            profilePicture: downloadURL
-        });
-
-        alert("Profile picture updated successfully!");
-        addProfileModal.style.display = "none";
-        resetUploadForm();
-    } catch (error) {
-        console.error("Error uploading file:", error);
-        alert("Error uploading file. Please try again.");
-        uploadProfilePicture.disabled = false;
-        uploadProfilePicture.textContent = "Upload Picture";
-    }
-});
-
-// Reset form helper
-function resetUploadForm() {
-    imagePreview.src = "/dist/default-avatar.png";
-    profilePictureInput.value = "";
-    uploadProfilePicture.disabled = true;
-    uploadProfilePicture.textContent = "Upload Picture";
-}
-
-
-
-
 // Function to search for the user's email in Firestore and send a friend request
 async function searchForUserEmail() {
   const emailInput = document.getElementById("friendEmail").value.trim(); // Get email from the correct input
@@ -394,18 +320,6 @@ async function initializeFriendsDropdown(user) {
     const newChatButton = document.getElementById("newChat");
     const friendsDropdown = document.getElementById("friendsDropdown");
 
-    // Clear existing content
-    friendsDropdown.innerHTML = '';
-    
-    // Add header
-    const header = document.createElement("div");
-    header.textContent = "Select a friend to chat with";
-    header.style.padding = "12px 16px";
-    header.style.fontWeight = "600";
-    header.style.borderBottom = "1px solid #eeeeee";
-    header.style.backgroundColor = "#f8f8f8";
-    friendsDropdown.appendChild(header);
-
     // Toggle dropdown visibility
     newChatButton.addEventListener("click", () => {
       // Toggle visibility
@@ -419,93 +333,38 @@ async function initializeFriendsDropdown(user) {
     friendsDropdown.innerHTML = "";
 
     // Populate friends list
-    friends.forEach(async (friend) => {
-      // If friend is just an email, fetch the friend's user document to get the uid
-      let friendDocRef;
-      if (typeof friend === "string") {
-        // Assuming friend is an email
-        friendDocRef = await getDoc(doc(db, "users", friend));
-      } else {
-        friendDocRef = await getDoc(doc(db, "users", friend.uid));
-      }
+    for (const friendId of friends) {
+      try {
+        const friendDocRef = doc(db, "users", friendId);
+        const friendDocSnapshot = await getDoc(friendDocRef);
 
-      if (friendDocRef.exists()) {
-        const friendData = friendDocRef.data();
-        const friendWithUid = { 
-          email: friendData.email, 
-          uid: friendData.uid,
-          firstname: friendData.firstname || '',
-          lastname: friendData.lastname || '',
-          profilePicture: friendData.profilePicture
-        };
+        if (friendDocSnapshot.exists()) {
+          const friendData = friendDocSnapshot.data();
+          const friendEmail = friendData.email;
 
-        const listItem = document.createElement("li");
-        listItem.style.padding = "12px 16px";
-        listItem.style.cursor = "pointer";
-        listItem.style.borderBottom = "1px solid #eeeeee";
-        listItem.style.transition = "all 0.2s ease";
+          // Create list item for the dropdown
+          const listItem = document.createElement("li");
+          listItem.textContent = friendEmail;
+          listItem.className = "dropdown-item";
 
-        // Create content container
-        const contentDiv = document.createElement("div");
-        contentDiv.style.display = "flex";
-        contentDiv.style.alignItems = "center";
-        contentDiv.style.gap = "12px";
+          // Add click listener to initiate a chat
+          listItem.addEventListener("click", async () => {
+            const chatId = await createNewChat(user, { email: friendEmail, uid: friendId });
+            friendsDropdown.style.display = "none"; // Hide dropdown after selection
 
-        // Add avatar
-        const avatar = document.createElement("img");
-        avatar.src = friendData.profilePicture || "/dist/defaultprofile.png";
-        avatar.style.width = "40px";
-        avatar.style.height = "40px";
-        avatar.style.borderRadius = "50%";
-        avatar.style.objectFit = "cover";
-        avatar.style.border = "2px solid #ffffff";
-        avatar.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+            if (chatId) {
+              window.location.href = `/chat/chat.html?chatId=${chatId}`;
+            }
+          });
 
-        // Add text container
-        const textDiv = document.createElement("div");
-        
-        // Add name if available
-        if (friendData.firstname || friendData.lastname) {
-          const nameDiv = document.createElement("div");
-          nameDiv.textContent = `${friendData.firstname || ''} ${friendData.lastname || ''}`;
-          nameDiv.style.fontWeight = "600";
-          nameDiv.style.color = "#333333";
-          textDiv.appendChild(nameDiv);
+          friendsDropdown.appendChild(listItem);
+        } else {
+          console.warn("Friend document not found:", friendId);
         }
-
-        // Add email
-        const emailDiv = document.createElement("div");
-        emailDiv.textContent = friendWithUid.email;
-        emailDiv.style.fontSize = "0.85rem";
-        emailDiv.style.color = "#666666";
-        textDiv.appendChild(emailDiv);
-
-        // Assemble the elements
-        contentDiv.appendChild(avatar);
-        contentDiv.appendChild(textDiv);
-        listItem.appendChild(contentDiv);
-
-        // Add hover effect
-        listItem.addEventListener("mouseover", () => {
-          listItem.style.backgroundColor = "#f8f8f8";
-          listItem.style.transform = "translateX(5px)";
-        });
-        listItem.addEventListener("mouseout", () => {
-          listItem.style.backgroundColor = "";
-          listItem.style.transform = "translateX(0)";
-        });
-
-        // Add click handler to initiate chat
-        listItem.addEventListener("click", async () => {
-          const chatId = await createNewChat(user, friendWithUid);
-          friendsDropdown.style.display = "none";
-        });
-
-        friendsDropdown.appendChild(listItem);
-      } else {
-        console.warn("Friend document not found:", friend);
+      } catch (error) {
+        console.error("Error fetching friend data:", error);
       }
-    });
+    }
 
     // Close dropdown when clicking outside
     document.addEventListener("click", (event) => {
@@ -779,4 +638,96 @@ async function createGroupChat(groupName, userIds) {
   } catch (error) {
     console.error('Error creating group chat or updating users:', error);
   }
+}
+
+const addProfileModal = document.getElementById("addProfileModal");
+const profilePictureButton = document.getElementById("profilePictureButton");
+const closeProfileModal = document.getElementById("closeProfileModal");
+const uploadProfilePicture = document.getElementById("uploadProfilePicture");
+const profilePictureInput = document.getElementById("profilePictureInput");
+const selectImageBtn = document.getElementById("selectImageBtn");
+const imagePreview = document.getElementById("imagePreview");
+
+// Show modal
+profilePictureButton.addEventListener("click", () => {
+    addProfileModal.style.display = "flex";
+});
+
+// Close modal
+closeProfileModal.addEventListener("click", () => {
+    addProfileModal.style.display = "none";
+    resetUploadForm();
+});
+
+// Close on outside click
+window.addEventListener("click", (event) => {
+    if (event.target == addProfileModal) {
+        addProfileModal.style.display = "none";
+        resetUploadForm();
+    }
+});
+
+// Trigger file input when select button is clicked
+selectImageBtn.addEventListener("click", () => {
+    profilePictureInput.click();
+});
+
+// Handle file selection
+profilePictureInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        uploadProfilePicture.disabled = false;
+    }
+});
+
+// Handle file upload
+uploadProfilePicture.addEventListener("click", async () => {
+    const file = profilePictureInput.files[0];
+    if (!file) {
+        alert("Please select a file first");
+        return;
+    }
+
+    try {
+        // Show loading state
+        uploadProfilePicture.disabled = true;
+        uploadProfilePicture.textContent = "Uploading...";
+
+        const user = auth.currentUser;
+        const storageRef = ref(storage, `profilePictures/${user.uid}`);
+        
+        // Upload file
+        await uploadBytes(storageRef, file);
+        
+        // Get download URL
+        const downloadURL = await getDownloadURL(storageRef);
+        
+        // Update user's profile in Firestore
+        const userRef = doc(db, "users", user.uid);
+        await updateDoc(userRef, {
+            profilePicture: downloadURL
+        });
+
+        alert("Profile picture updated successfully!");
+        addProfileModal.style.display = "none";
+        resetUploadForm();
+    } catch (error) {
+        console.error("Error uploading file:", error);
+        alert("Error uploading file. Please try again.");
+        uploadProfilePicture.disabled = false;
+        uploadProfilePicture.textContent = "Upload Picture";
+    }
+});
+
+// Reset form helper
+function resetUploadForm() {
+    imagePreview.src = "/dist/default-avatar.png";
+    profilePictureInput.value = "";
+    uploadProfilePicture.disabled = true;
+    uploadProfilePicture.textContent = "Upload Picture";
 }

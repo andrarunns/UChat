@@ -1,5 +1,5 @@
 node_modules
 bundle.js
-chat.bundle.js
-dashboard.bundle.js
-notifications.bundle.js
+dist/dashboard.bundle.js
+notifications/notifications.bundle.js
+chat/chat.bundle.js
