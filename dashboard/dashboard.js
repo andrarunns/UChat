@@ -1,6 +1,6 @@
 // Import the necessary Firebase functions
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut, sendPasswordResetEmail } from "firebase/auth";
 import {
   getFirestore,
   doc,
@@ -15,7 +15,6 @@ import {
   serverTimestamp,
   addDoc,
   writeBatch,
-  sendPasswordResetEmail,
 } from "firebase/firestore"; // Import Firestore functions
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
