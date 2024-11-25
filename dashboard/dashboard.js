@@ -311,26 +311,23 @@ const notificationBell = document.getElementById("notificationBell");
 notificationBell.addEventListener("click", () => {
   window.location.href = "/notifications/notifications.html";
 });
-// Function to initialize the friends dropdown
 async function initializeFriendsDropdown(user) {
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDocSnapshot = await getDoc(userDocRef);
-
+    
     if (!userDocSnapshot.exists()) {
       console.log("User document not found");
       return;
     }
 
     const userData = userDocSnapshot.data();
-    const friends = userData.friends || []; // Use an empty array if no friends
-
+    const friends = userData.friends || [];
+    
     const newChatButton = document.getElementById("newChat");
     const friendsDropdown = document.getElementById("friendsDropdown");
 
-    // Toggle dropdown visibility
     newChatButton.addEventListener("click", () => {
-      // Toggle visibility
       friendsDropdown.style.display =
         friendsDropdown.style.display === "none" ||
         !friendsDropdown.style.display
@@ -338,10 +335,8 @@ async function initializeFriendsDropdown(user) {
           : "none";
     });
 
-    // Clear existing dropdown items
     friendsDropdown.innerHTML = "";
 
-    // Populate friends list
     for (const friendId of friends) {
       try {
         const friendDocRef = doc(db, "users", friendId);
@@ -349,20 +344,37 @@ async function initializeFriendsDropdown(user) {
 
         if (friendDocSnapshot.exists()) {
           const friendData = friendDocSnapshot.data();
-          const friendEmail = friendData.email;
-
-          // Create list item for the dropdown
+          
           const listItem = document.createElement("li");
-          listItem.textContent = friendEmail;
           listItem.className = "dropdown-item";
 
-          // Add click listener to initiate a chat
+          // Create profile picture
+          const avatar = document.createElement("img");
+          avatar.src = friendData.profilePicUrl || "/dist/defaultprofile.png";
+          avatar.className = "friend-avatar";
+
+          // Create text container
+          const textContainer = document.createElement("div");
+          textContainer.className = "friend-info";
+
+          // Add name
+          const nameDiv = document.createElement("div");
+          nameDiv.className = "friend-name";
+          nameDiv.textContent = `${friendData.firstname} ${friendData.lastname}`;
+
+          // Assemble elements
+          textContainer.appendChild(nameDiv);
+          listItem.appendChild(avatar);
+          listItem.appendChild(textContainer);
+
           listItem.addEventListener("click", async () => {
             const chatId = await createNewChat(user, {
-              email: friendEmail,
+              email: friendData.email,
               uid: friendId,
+              firstname: friendData.firstname,
+              lastname: friendData.lastname
             });
-            friendsDropdown.style.display = "none"; // Hide dropdown after selection
+            friendsDropdown.style.display = "none";
 
             if (chatId) {
               window.location.href = `/chat/chat.html?chatId=${chatId}`;
@@ -378,7 +390,6 @@ async function initializeFriendsDropdown(user) {
       }
     }
 
-    // Close dropdown when clicking outside
     document.addEventListener("click", (event) => {
       if (
         !newChatButton.contains(event.target) &&
