@@ -125,20 +125,25 @@ input[type="text"] {
 #notificationBell {
   background: none;
   border: none;
-  color: #fff;
+  color: #ffffff;
   cursor: pointer;
   position: relative;
+  padding: 8px;
+  transition: all 0.3s ease;
 }
 
-#notificationDot {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  height: 8px;
-  width: 8px;
-  background-color: red;
-  border-radius: 50%;
-  display: none;
+#notificationBell:hover {
+  animation: swayBell 1s infinite ease-in-out;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  filter: brightness(1.2);
+}
+
+@keyframes swayBell {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-15deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(15deg); }
+  100% { transform: rotate(0deg); }
 }
 
 /* Modal for Add Friend */
@@ -629,18 +634,20 @@ input[type="text"] {
   border-radius: 5px;
 }
 
-/* Button Styling */
-#newGroupChatModal button {
-  padding: 10px 20px;
-  background-color: #4CAF50;
+#newGroupChatButton {
+  background-color: orange;
   color: white;
+  padding: 8px 16px;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
-#newGroupChatModal button:hover {
-  background-color: #45a049;
+#newGroupChatButton:hover {
+  background-color: #ff7f00;
+  transform: scale(1.05);
 }
 /* Styling for Friends Selection in Modal */
 #friendsSelectionContainer {
