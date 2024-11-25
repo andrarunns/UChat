@@ -393,6 +393,18 @@ async function initializeFriendsDropdown(user) {
     const newChatButton = document.getElementById("newChat");
     const friendsDropdown = document.getElementById("friendsDropdown");
 
+    // Clear existing content
+    friendsDropdown.innerHTML = '';
+    
+    // Add header
+    const header = document.createElement("div");
+    header.textContent = "Select a friend to chat with";
+    header.style.padding = "12px 16px";
+    header.style.fontWeight = "600";
+    header.style.borderBottom = "1px solid #eeeeee";
+    header.style.backgroundColor = "#f8f8f8";
+    friendsDropdown.appendChild(header);
+
     // Toggle dropdown visibility
     newChatButton.addEventListener("click", () => {
       friendsDropdown.style.display =
@@ -408,41 +420,81 @@ async function initializeFriendsDropdown(user) {
       let friendDocRef;
       if (typeof friend === "string") {
         // Assuming friend is an email
-        friendDocRef = await getDoc(doc(db, "users", friend)); // Fetch the friend document by email
+        friendDocRef = await getDoc(doc(db, "users", friend));
       } else {
-        friendDocRef = await getDoc(doc(db, "users", friend.uid)); // If friend is an object with uid
+        friendDocRef = await getDoc(doc(db, "users", friend.uid));
       }
 
       if (friendDocRef.exists()) {
         const friendData = friendDocRef.data();
-        const friendWithUid = { email: friendData.email, uid: friendData.uid };
+        const friendWithUid = { 
+          email: friendData.email, 
+          uid: friendData.uid,
+          firstname: friendData.firstname || '',
+          lastname: friendData.lastname || '',
+          profilePicture: friendData.profilePicture
+        };
 
         const listItem = document.createElement("li");
-        listItem.textContent = friendWithUid.email; // Display friend's email
-        listItem.style.padding = "10px";
+        listItem.style.padding = "12px 16px";
         listItem.style.cursor = "pointer";
-        listItem.style.borderBottom = "1px solid #ccc";
+        listItem.style.borderBottom = "1px solid #eeeeee";
+        listItem.style.transition = "all 0.2s ease";
+
+        // Create content container
+        const contentDiv = document.createElement("div");
+        contentDiv.style.display = "flex";
+        contentDiv.style.alignItems = "center";
+        contentDiv.style.gap = "12px";
+
+        // Add avatar
+        const avatar = document.createElement("img");
+        avatar.src = friendData.profilePicture || "/dist/defaultprofile.png";
+        avatar.style.width = "40px";
+        avatar.style.height = "40px";
+        avatar.style.borderRadius = "50%";
+        avatar.style.objectFit = "cover";
+        avatar.style.border = "2px solid #ffffff";
+        avatar.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+
+        // Add text container
+        const textDiv = document.createElement("div");
+        
+        // Add name if available
+        if (friendData.firstname || friendData.lastname) {
+          const nameDiv = document.createElement("div");
+          nameDiv.textContent = `${friendData.firstname || ''} ${friendData.lastname || ''}`;
+          nameDiv.style.fontWeight = "600";
+          nameDiv.style.color = "#333333";
+          textDiv.appendChild(nameDiv);
+        }
+
+        // Add email
+        const emailDiv = document.createElement("div");
+        emailDiv.textContent = friendWithUid.email;
+        emailDiv.style.fontSize = "0.85rem";
+        emailDiv.style.color = "#666666";
+        textDiv.appendChild(emailDiv);
+
+        // Assemble the elements
+        contentDiv.appendChild(avatar);
+        contentDiv.appendChild(textDiv);
+        listItem.appendChild(contentDiv);
 
         // Add hover effect
         listItem.addEventListener("mouseover", () => {
-          listItem.style.backgroundColor = "#f0f0f0";
+          listItem.style.backgroundColor = "#f8f8f8";
+          listItem.style.transform = "translateX(5px)";
         });
         listItem.addEventListener("mouseout", () => {
           listItem.style.backgroundColor = "";
+          listItem.style.transform = "translateX(0)";
         });
 
         // Add click handler to initiate chat
         listItem.addEventListener("click", async () => {
-          const chatId = await createNewChat(user, friendWithUid); // Pass friend as an object with email and uid
-          friendsDropdown.style.display = "none"; // Hide dropdown after selecting friend
-
-          if (chatId) {
-            // Redirect to the new chat room using the chatId
-            console.log("aj andrea");
-            //window.location.href = `/chat/${chatId}`;  // Adjust the URL structure based on your routing setup
-            // Redirect the user to the chat page
-            //window.location.href = `/chat.html?chatId=${chatId}`;
-          }
+          const chatId = await createNewChat(user, friendWithUid);
+          friendsDropdown.style.display = "none";
         });
 
         friendsDropdown.appendChild(listItem);
