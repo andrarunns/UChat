@@ -90,6 +90,28 @@
             <button id="sendFriendRequest">Send Request</button>
         </div>
     </div>
+    <!-- New Group Chat Modal -->
+    <div id="newGroupChatModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeNewGroupChatModal">&times;</span>
+        <h3>Create a New Group Chat</h3>
+        
+        <!-- Group Chat Name Input -->
+        <input type="text" id="groupChatName" placeholder="Group chat name" />
+
+        <!-- New section for selecting friends -->
+        <h4>Select Friends</h4>
+        <div id="friendsSelectionContainer">
+          <ul id="friendsList">
+            <!-- Friends list will be populated here -->
+          </ul>
+        </div>
+
+        <!-- Create Group Chat Button -->
+        <button id="createGroupChatButton">Create Group Chat</button>
+      </div>
+    </div>
+
 
     <div id="addProfileModal">
       <div class="modal-content">
