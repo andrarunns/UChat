@@ -77,11 +77,7 @@ async function fetchUserConversations() {
       console.log("No conversations available for this user.");
       return;
     }
-<<<<<<< HEAD
-
-=======
     // Get the conversations container in the DOM
->>>>>>> group-chats
     const conversationsContainer = document.getElementById("chatList");
     conversationsContainer.innerHTML = "";
 
@@ -95,7 +91,6 @@ async function fetchUserConversations() {
     querySnapshot.forEach(async (chatDoc) => {
       if (conversations.includes(chatDoc.id)) {
         const chatData = chatDoc.data();
-<<<<<<< HEAD
         const otherUsers = chatData.participants.filter(
           (participant) => participant !== user.uid
         );
@@ -140,65 +135,6 @@ async function fetchUserConversations() {
             console.error(`Error fetching user details for ID: ${otherUserId}`, error);
           }
         });
-=======
-        console.log(chatData);
-        // Check if it's a group chat
-        if (chatData.name) {
-          console.log("entra");
-          // It's a group chat
-          const groupName = chatData.name;
-          
-          // Create the list item
-          const listItem = document.createElement("li");
-          listItem.textContent = `${groupName}: ${chatData.lastMessage}`; // Display group name and last message
-          listItem.className = "chat-item";
-    
-          // Add a click listener to open the chat or navigate
-          listItem.addEventListener("click", () => {
-            window.location.href = `/chat/chat.html?chatId=${chatDoc.id}`;
-          });
-    
-          conversationsContainer.appendChild(listItem); // Append to the container
-        } else {
-          // It's an individual chat
-          const otherUsers = chatData.participants.filter(
-            (participant) => participant !== user.uid
-          );
-    
-          otherUsers.forEach(async (otherUserId) => {
-            try {
-              // Fetch user details from Firestore
-              const userDocRef = doc(db, "users", otherUserId);
-              const userDocSnapshot = await getDoc(userDocRef);
-    
-              if (!userDocSnapshot.exists()) {
-                console.log(`User document not found for ID: ${otherUserId}`);
-                return;
-              }
-    
-              const otherUserData = userDocSnapshot.data();
-              const fullName = `${otherUserData.firstname} ${otherUserData.lastname}`;
-    
-              // Create the list item
-              const listItem = document.createElement("li");
-              listItem.textContent = `${fullName}: ${chatData.lastMessage}`; // Display the full name and last message
-              listItem.className = "chat-item";
-    
-              // Add a click listener to open the chat or navigate
-              listItem.addEventListener("click", () => {
-                window.location.href = `/chat/chat.html?chatId=${chatDoc.id}`;
-              });
-    
-              conversationsContainer.appendChild(listItem); // Append to the container
-            } catch (error) {
-              console.error(
-                `Error fetching user details for ID: ${otherUserId}`,
-                error
-              );
-            }
-          });
-        }
->>>>>>> group-chats
       }
     });    
   } catch (error) {
@@ -483,40 +419,6 @@ async function initializeFriendsDropdown(user) {
     friendsDropdown.innerHTML = "";
 
     // Populate friends list
-<<<<<<< HEAD
-    for (const friendId of friends) {
-      try {
-        const friendDocRef = doc(db, "users", friendId);
-        const friendDocSnapshot = await getDoc(friendDocRef);
-
-        if (friendDocSnapshot.exists()) {
-          const friendData = friendDocSnapshot.data();
-          const friendEmail = friendData.email;
-
-          // Create list item for the dropdown
-          const listItem = document.createElement("li");
-          listItem.textContent = friendEmail;
-          listItem.className = "dropdown-item";
-
-          // Add click listener to initiate a chat
-          listItem.addEventListener("click", async () => {
-            const chatId = await createNewChat(user, { email: friendEmail, uid: friendId });
-            friendsDropdown.style.display = "none"; // Hide dropdown after selection
-
-            if (chatId) {
-              window.location.href = `/chat/chat.html?chatId=${chatId}`;
-            }
-          });
-
-          friendsDropdown.appendChild(listItem);
-        } else {
-          console.warn("Friend document not found:", friendId);
-        }
-      } catch (error) {
-        console.error("Error fetching friend data:", error);
-      }
-    }
-=======
     friends.forEach(async (friend) => {
       // If friend is just an email, fetch the friend's user document to get the uid
       let friendDocRef;
@@ -604,7 +506,6 @@ async function initializeFriendsDropdown(user) {
         console.warn("Friend document not found:", friend);
       }
     });
->>>>>>> b0ab5523aab476911f7f088d9738e3937125c91d
 
     // Close dropdown when clicking outside
     document.addEventListener("click", (event) => {
@@ -701,12 +602,6 @@ onAuthStateChanged(auth, async (user) => {
     console.log("No user is logged in. allegedly");
   }
 });
-<<<<<<< HEAD
-
-
-
-
-=======
 // Get references to the modal and button
 const newGroupChatButton = document.getElementById("newGroupChatButton");
 const newGroupChatModal = document.getElementById("newGroupChatModal");
@@ -885,4 +780,3 @@ async function createGroupChat(groupName, userIds) {
     console.error('Error creating group chat or updating users:', error);
   }
 }
->>>>>>> group-chats
