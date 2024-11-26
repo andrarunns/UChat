@@ -24,11 +24,12 @@
         <img src="/dist/pickaxe.png" alt="Pickaxe Icon" class="pickaxe" />
         <!-- Search Bar inside the top banner -->
         <div class="searchContainer">
-            <input type="text" placeholder="Search..." />
+            <input type="text" id="searchInput" placeholder="Search messages..." />
             <button id="notificationBell">
                 <span style="font-size: 20px">🔔</span>
                 <span id="notificationDot"></span>
             </button>
+            <div id="searchResults"></div>
         </div>
         <!-- Buttons inside the top banner -->
         <div class="topBannerButtons">
@@ -108,7 +109,6 @@
         <h4>Select Friends</h4>
         <div id="friendsSelectionContainer">
           <ul id="friendsList">
-            <!-- Friends list will be populated here -->
           </ul>
         </div>
 

@@ -16,7 +16,7 @@ import {
   query,
   where,
   updateDoc,
-} from "firebase/firestore"; // Import Firestore functions
+} from "firebase/firestore";
 
 import { arrayUnion, arrayRemove } from "firebase/firestore";
 
@@ -33,7 +33,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app); // Initialize Firestore
+const db = getFirestore(app);
 
 // Ensure authentication persistence
 setPersistence(auth, browserLocalPersistence)
@@ -49,7 +49,7 @@ window.addEventListener("DOMContentLoaded", () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       console.log("User logged in:", user.uid);
-      loadfriendRequest(user); // Pass the user object to the function
+      loadfriendRequest(user);
     } else {
       alert("No user is logged in.");
     }
@@ -118,10 +118,10 @@ async function displayNotification(friendRequest) {
       const lastName = userData.lastname || "Unknown";
 
       // Add a row for this friend request
-      let row = table.insertRow(-1); // Add a row at the end of the table
+      let row = table.insertRow(-1);
       let cell1 = row.insertCell(0);
       let cell2 = row.insertCell(1);
-      let cell3 = row.insertCell(2); // Action buttons
+      let cell3 = row.insertCell(2);
 
       // Display the request message with first and last name
       cell2.innerHTML = `Friend request from: ${firstName} ${lastName}`;
@@ -158,7 +158,7 @@ async function acceptFriendRequest(uid) {
     }
 
     const currentUserDocRef = doc(db, "users", currentUser.uid);
-    const senderUserDocRef = doc(db, "users", uid); // Reference to sender's document
+    const senderUserDocRef = doc(db, "users", uid);
 
     // Perform both updates in Firestore
     await Promise.all([
@@ -197,13 +197,12 @@ async function declineFriendRequest(uid) {
 
     // Remove the UID from the 'friendRequest' array
     await updateDoc(currentUserDocRef, {
-      friendRequest: arrayRemove(uid), // Remove from friend requests
+      friendRequest: arrayRemove(uid),
     });
 
     console.log(`Removed UID ${uid} from friend requests.`);
     alert("Friend request declined!");
 
-    // Optionally, reload friend requests
     loadfriendRequest();
   } catch (error) {
     console.error("Error declining friend request:", error);

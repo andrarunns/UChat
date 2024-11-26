@@ -1,6 +1,11 @@
 // Import the necessary Firebase functions
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, signOut, sendPasswordResetEmail } from "firebase/auth";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import {
   getFirestore,
   doc,
@@ -15,7 +20,7 @@ import {
   serverTimestamp,
   addDoc,
   writeBatch,
-} from "firebase/firestore"; // Import Firestore functions
+} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { onSnapshot } from "firebase/firestore";
 
@@ -33,7 +38,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app); // Initialize Firestore
+const db = getFirestore(app);
 const storage = getStorage(app);
 
 // Automatically fetch user conversations when the page loads
@@ -42,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (user) {
       console.log("User is logged in:", user);
       try {
-        await fetchUserConversations(); // Call the function if user is logged in
+        await fetchUserConversations();
         await updateNotificationBell();
       } catch (error) {
         console.error("Error calling fetchUserConversations:", error);
@@ -55,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Function to get the current user's conversations
 async function fetchUserConversations() {
-  const user = auth.currentUser; // Get the current logged-in user
+  const user = auth.currentUser;
 
   if (!user) {
     console.log("No user is logged in.");
@@ -82,7 +87,7 @@ async function fetchUserConversations() {
     }
     // Get the conversations container in the DOM
     const conversationsContainer = document.getElementById("chatList");
-    conversationsContainer.innerHTML = ""; // Clear any existing content
+    conversationsContainer.innerHTML = "";
 
     // Fetch the conversations from Firestore 'chats' collection
     const conversationsRef = collection(db, "chats");
@@ -104,7 +109,7 @@ async function fetchUserConversations() {
 
           // Create the list item
           const listItem = document.createElement("li");
-          listItem.textContent = `${groupName}: ${chatData.lastMessage}`; // Display group name and last message
+          listItem.textContent = `${groupName}: ${chatData.lastMessage}`;
           listItem.className = "chat-item";
 
           // Add a click listener to open the chat or navigate
@@ -112,7 +117,7 @@ async function fetchUserConversations() {
             window.location.href = `/chat/chat.html?chatId=${chatDoc.id}`;
           });
 
-          conversationsContainer.appendChild(listItem); // Append to the container
+          conversationsContainer.appendChild(listItem);
         } else {
           // It's an individual chat
           const otherUsers = chatData.participants.filter(
@@ -142,9 +147,9 @@ async function fetchUserConversations() {
 
               // Check if the user has a profilePicUrl
               if (otherUserData.profilePicUrl) {
-                avatar.src = otherUserData.profilePicUrl; // Use the profile picture URL if available
+                avatar.src = otherUserData.profilePicUrl;
               } else {
-                avatar.src = "/dist/defaultprofile.png"; // Use default image if no profilePicUrl
+                avatar.src = "/dist/defaultprofile.png";
               }
 
               avatar.className = "chat-avatar";
@@ -161,7 +166,7 @@ async function fetchUserConversations() {
                 const lastSeenTime = otherUserData.lastSeen.toDate();
                 const timeDiff = Date.now() - lastSeenTime;
                 // Consider user online if last seen within last 2 minutes
-                if (timeDiff < 120000) { // 2 minutes in milliseconds
+                if (timeDiff < 120000) {
                   statusDot.classList.add("online");
                 }
               }
@@ -212,17 +217,14 @@ const addFriendModal = document.getElementById("addFriendModal");
 const addFriendButton = document.getElementById("addFriendButton");
 const closeModal = document.getElementById("closeModal");
 
-// Show modal on "Add Friend" button click
 addFriendButton.addEventListener("click", () => {
   addFriendModal.style.display = "flex";
 });
 
-// Close modal when clicking the close button
 closeModal.addEventListener("click", () => {
   addFriendModal.style.display = "none";
 });
 
-// Optional: Close modal when clicking outside of the modal content
 window.addEventListener("click", (event) => {
   if (event.target == addFriendModal) {
     addFriendModal.style.display = "none";
@@ -230,8 +232,8 @@ window.addEventListener("click", (event) => {
 });
 // Function to search for the user's email in Firestore and send a friend request
 async function searchForUserEmail() {
-  const emailInput = document.getElementById("friendEmail").value.trim(); // Get email from the correct input
-  const currentUser = auth.currentUser; // Get the currently logged-in user
+  const emailInput = document.getElementById("friendEmail").value.trim();
+  const currentUser = auth.currentUser;
 
   if (!emailInput) {
     alert("Please enter an email address.");
@@ -284,7 +286,7 @@ document
   .addEventListener("click", searchForUserEmail);
 
 async function updateNotificationBell() {
-  const user = auth.currentUser; // Get the current logged-in user
+  const user = auth.currentUser;
 
   if (!user) {
     console.log("No user is logged in.");
@@ -327,7 +329,7 @@ async function initializeFriendsDropdown(user) {
   try {
     const userDocRef = doc(db, "users", user.uid);
     const userDocSnapshot = await getDoc(userDocRef);
-    
+
     if (!userDocSnapshot.exists()) {
       console.log("User document not found");
       return;
@@ -335,7 +337,7 @@ async function initializeFriendsDropdown(user) {
 
     const userData = userDocSnapshot.data();
     const friends = userData.friends || [];
-    
+
     const newChatButton = document.getElementById("newChat");
     const friendsDropdown = document.getElementById("friendsDropdown");
 
@@ -356,7 +358,7 @@ async function initializeFriendsDropdown(user) {
 
         if (friendDocSnapshot.exists()) {
           const friendData = friendDocSnapshot.data();
-          
+
           const listItem = document.createElement("li");
           listItem.className = "dropdown-item";
 
@@ -384,7 +386,7 @@ async function initializeFriendsDropdown(user) {
               email: friendData.email,
               uid: friendId,
               firstname: friendData.firstname,
-              lastname: friendData.lastname
+              lastname: friendData.lastname,
             });
             friendsDropdown.style.display = "none";
 
@@ -448,32 +450,30 @@ async function createNewChat(currentUser, friend) {
 
     // Generate a new chat ID manually
     const chatId = Math.floor(10000 + Math.random() * 90000).toString();
-    const newChatRef = doc(db, "chats", chatId); // Create a reference for the new chat
+    const newChatRef = doc(db, "chats", chatId);
 
     const newChatData = {
-      participants: [currentUser.uid, friend.uid], // Chat participants
-      createdAt: serverTimestamp(), // Chat creation timestamp
-      lastMessage: "Hello, how are you?", // Initial last message
-      lastMessageAt: serverTimestamp(), // Timestamp of the last message
+      participants: [currentUser.uid, friend.uid],
+      createdAt: serverTimestamp(),
+      lastMessage: "Hello, how are you?",
+      lastMessageAt: serverTimestamp(),
     };
 
-    console.log("New chat data:", newChatData); // Debugging log
+    console.log("New chat data:", newChatData);
 
     // Use setDoc to create the new chat document
     await setDoc(newChatRef, newChatData);
     console.log("New chat created with ID:", chatId);
 
-    // Update the user's document to include the new chat
     await updateDoc(doc(db, "users", currentUser.uid), {
-      chats: arrayUnion(chatId), // Append the chat ID to the user's list of chats
+      chats: arrayUnion(chatId),
     });
 
-    // Update the friend's document if they exist
     const friendDocRef = doc(db, "users", friend.uid);
     const friendDoc = await getDoc(friendDocRef);
     if (friendDoc.exists()) {
       await updateDoc(friendDocRef, {
-        chats: arrayUnion(chatId), // Append the chat ID to the friend's list of chats
+        chats: arrayUnion(chatId),
       });
     } else {
       console.warn("Friend document does not exist:", friend.uid);
@@ -506,7 +506,7 @@ const friendsListContainer = document.getElementById("friendsList");
 
 // Fetch friends' details (names) from Firestore
 async function fetchFriends() {
-  const user = auth.currentUser; // Get the current logged-in user
+  const user = auth.currentUser;
 
   if (!user) {
     alert("You must be logged in to create a group chat.");
@@ -524,7 +524,7 @@ async function fetchFriends() {
     }
 
     const userData = userDocSnapshot.data();
-    const friendsList = userData.friends || []; // Fetch the list of friend IDs from Firestore
+    const friendsList = userData.friends || [];
     console.log("friends list (IDs):", friendsList);
 
     // Fetch each friend's details (name) based on their ID
@@ -533,14 +533,13 @@ async function fetchFriends() {
         const friendDocRef = doc(db, "users", friendId);
         const friendDocSnapshot = await getDoc(friendDocRef);
         if (friendDocSnapshot.exists()) {
-          return friendDocSnapshot.data(); // Return friend's data (including name)
+          return friendDocSnapshot.data();
         } else {
-          return null; // In case the friend's data is not found
+          return null;
         }
       })
     );
 
-    // Filter out any null values (for cases where a friend's data is missing)
     const validFriends = friendsData.filter((friend) => friend !== null);
     console.log("friends data (names):", validFriends);
 
@@ -554,7 +553,7 @@ async function fetchFriends() {
 // Populate the friends list dynamically from Firestore
 function populateFriendsList(friends) {
   const friendsListContainer = document.getElementById("friendsList");
-  friendsListContainer.innerHTML = ""; // Clear existing list
+  friendsListContainer.innerHTML = "";
 
   if (friends.length === 0) {
     friendsListContainer.innerHTML = "<li>No friends found</li>";
@@ -562,9 +561,9 @@ function populateFriendsList(friends) {
     friends.forEach((friend) => {
       const fullName = `${friend.firstname} ${friend.lastname}`;
       const li = document.createElement("li");
-      li.textContent = fullName; // Display friend's name
-      li.dataset.uid = friend.uid; // Store friend's ID in data attribute (optional)
-      li.addEventListener("click", () => toggleSelection(li)); // Add event listener
+      li.textContent = fullName;
+      li.dataset.uid = friend.uid;
+      li.addEventListener("click", () => toggleSelection(li));
       friendsListContainer.appendChild(li);
     });
   }
@@ -575,18 +574,15 @@ function toggleSelection(listItem) {
   listItem.classList.toggle("selected");
 }
 
-// Open the "New Group Chat" modal when the button is clicked
 newGroupChatButton.addEventListener("click", () => {
   newGroupChatModal.style.display = "block";
-  fetchFriends(); // Fetch and populate friends when modal is opened
+  fetchFriends();
 });
 
-// Close the modal when the close button is clicked
 closeNewGroupChatModal.addEventListener("click", () => {
   newGroupChatModal.style.display = "none";
 });
 
-// Close the modal if the user clicks outside of it
 window.addEventListener("click", (event) => {
   if (event.target === newGroupChatModal) {
     newGroupChatModal.style.display = "none";
@@ -600,7 +596,7 @@ document
     const selectedFriends = [];
     const selectedItems = document.querySelectorAll("#friendsList .selected");
     selectedItems.forEach((item) => {
-      selectedFriends.push(item.dataset.uid); // Collect selected friend names
+      selectedFriends.push(item.dataset.uid);
     });
 
     const groupName = document.getElementById("groupChatName").value;
@@ -609,9 +605,9 @@ document
       console.log(`With friends: ${selectedFriends.join(", ")}`);
 
       // Call your API or Firestore logic to create the group chat here
-      createGroupChat(groupName, selectedFriends); // Function to handle creating the group chat
+      createGroupChat(groupName, selectedFriends);
 
-      newGroupChatModal.style.display = "none"; // Close modal after action
+      newGroupChatModal.style.display = "none";
     } else {
       alert("Please provide a group name and select at least one friend.");
     }
@@ -622,7 +618,6 @@ async function createGroupChat(groupName, userIds) {
   try {
     const auth = getAuth();
     const currentUser = auth.currentUser;
-    // Step 1: Get user data for each userId (you can customize what data you need)
     const usersSnapshot = await getDocs(
       query(collection(db, "users"), where("uid", "in", userIds))
     );
@@ -648,25 +643,23 @@ async function createGroupChat(groupName, userIds) {
       throw new Error("Some users not found");
     }
 
-    // Step 2: Create the chat document in the 'chats' collection
     const groupChatData = {
       participants: userIds,
       name: groupName,
-      createdAt: serverTimestamp(), // Timestamp for when the group was created
+      createdAt: serverTimestamp(),
       lastMessage: "",
       lastMessageAt: serverTimestamp(),
-      createdBy: users[0].uid, // Assuming the first user is the creator
+      createdBy: users[0].uid,
     };
 
     const chatRef = await addDoc(collection(db, "chats"), groupChatData);
 
-    // Step 3: Prepare batch update for users' chats field
     const batch = writeBatch(db);
 
     userIds.forEach((userId) => {
       const userRef = doc(db, "users", userId);
       batch.update(userRef, {
-        chats: arrayUnion(chatRef.id), // Add chat ID to the user's chats array
+        chats: arrayUnion(chatRef.id),
       });
     });
     const userRef = doc(db, "users", currentUserInfo.uid);
@@ -674,7 +667,6 @@ async function createGroupChat(groupName, userIds) {
       chats: arrayUnion(chatRef.id),
     });
 
-    // Step 4: Commit the batch update
     await batch.commit();
     console.log("Group chat created and users updated successfully!");
   } catch (error) {
@@ -690,18 +682,15 @@ const profilePictureInput = document.getElementById("profilePictureInput");
 const selectImageBtn = document.getElementById("selectImageBtn");
 const imagePreview = document.getElementById("imagePreview");
 
-// Show modal when the profile picture button is clicked
 profilePictureButton.addEventListener("click", () => {
   addProfileModal.style.display = "flex";
 });
 
-// Close the modal when the close button is clicked
 closeProfileModal.addEventListener("click", () => {
   addProfileModal.style.display = "none";
   resetUploadForm();
 });
 
-// Close the modal if clicked outside of the modal
 window.addEventListener("click", (event) => {
   if (event.target == addProfileModal) {
     addProfileModal.style.display = "none";
@@ -709,12 +698,10 @@ window.addEventListener("click", (event) => {
   }
 });
 
-// Trigger the file input when the select button is clicked
 selectImageBtn.addEventListener("click", () => {
   profilePictureInput.click();
 });
 
-// Handle file selection and show preview
 profilePictureInput.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (file) {
@@ -740,25 +727,19 @@ uploadProfilePicture.addEventListener("click", async () => {
     uploadProfilePicture.disabled = true;
     uploadProfilePicture.textContent = "Uploading...";
 
-    const user = auth.currentUser; // Get the current logged-in user
+    const user = auth.currentUser;
     if (!user) {
       alert("No user is logged in.");
       return;
     }
-
     // Create a storage reference for the profile picture
     const storageRef = ref(storage, `pfp_files/${user.uid}`);
-
     // Upload the file to Firebase Storage
     const fileSnapshot = await uploadBytes(storageRef, file);
-    //const fileURL = await getDownloadURL(fileSnapshot.ref);
-
-    // Get the download URL of the uploaded file
-    //const downloadURL = await storageRef.getDownloadURL();
     const fileURL = await getDownloadURL(fileSnapshot.ref);
-    // Update the user's profile in Firestore with the profile picture URL
+    L;
     await updateDoc(doc(db, "users", user.uid), {
-      profilePicUrl: fileURL, // Append the chat ID to the user's list of chats
+      profilePicUrl: fileURL,
     });
 
     alert("Profile picture updated successfully!");
@@ -774,17 +755,17 @@ uploadProfilePicture.addEventListener("click", async () => {
 
 // Reset form helper to clear input fields and preview
 function resetUploadForm() {
-  imagePreview.src = "/dist/default-avatar.png"; // default image
-  profilePictureInput.value = ""; // clear file input
-  uploadProfilePicture.disabled = true; // disable upload button until a file is selected
-  uploadProfilePicture.textContent = "Upload Picture"; // reset button text
+  imagePreview.src = "/dist/default-avatar.png";
+  profilePictureInput.value = "";
+  uploadProfilePicture.disabled = true;
+  uploadProfilePicture.textContent = "Upload Picture";
 }
 
 // Handle reset password
 document
   .getElementById("resetPasswordButton")
   .addEventListener("click", async () => {
-    const user = auth.currentUser; // Get the current logged-in user
+    const user = auth.currentUser;
     if (!user) {
       alert("You must be logged in to reset your password.");
       return;
@@ -801,17 +782,165 @@ document
     }
   });
 
-  // Add this function to update user's status
+// update user's status
 async function updateOnlineStatus() {
   const user = auth.currentUser;
   if (user) {
-      const userRef = doc(db, "users", user.uid);
-      await updateDoc(userRef, {
-          lastSeen: serverTimestamp()
-      });
+    const userRef = doc(db, "users", user.uid);
+    await updateDoc(userRef, {
+      lastSeen: serverTimestamp(),
+    });
   }
 }
 
 setInterval(updateOnlineStatus, 60000);
-document.addEventListener('DOMContentLoaded', updateOnlineStatus);
-window.addEventListener('beforeunload', updateOnlineStatus);
+document.addEventListener("DOMContentLoaded", updateOnlineStatus);
+window.addEventListener("beforeunload", updateOnlineStatus);
+
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener(
+  "input",
+  debounce(async (e) => {
+    const searchTerm = e.target.value.toLowerCase().trim();
+    const searchResults = document.getElementById("searchResults");
+
+    if (!searchTerm) {
+      searchResults.style.display = "none";
+      return;
+    }
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+      // Get user's chats
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+      const conversations = userDocSnapshot.data().chats || [];
+
+      const results = [];
+
+      // Fetch and filter conversations
+      for (const chatId of conversations) {
+        const chatDoc = await getDoc(doc(db, "chats", chatId));
+        if (chatDoc.exists()) {
+          const chatData = chatDoc.data();
+
+          // Get all messages from this chat
+          const messagesRef = collection(db, "chats", chatId, "messages");
+          const messagesSnapshot = await getDocs(messagesRef);
+
+          let matchFound = false;
+          let matchingMessage = "";
+
+          // Search through all messages
+          messagesSnapshot.forEach((messageDoc) => {
+            const messageData = messageDoc.data();
+            if (
+              messageData.text &&
+              messageData.text.toLowerCase().includes(searchTerm)
+            ) {
+              matchFound = true;
+              matchingMessage = messageData.text;
+            }
+          });
+
+          if (matchFound) {
+            if (chatData.name) {
+              results.push({
+                id: chatId,
+                name: chatData.name,
+                message: matchingMessage,
+              });
+            } else {
+              // Individual chat
+              const otherUserId = chatData.participants.find(
+                (id) => id !== user.uid
+              );
+              const otherUserDoc = await getDoc(doc(db, "users", otherUserId));
+
+              if (otherUserDoc.exists()) {
+                const otherUserData = otherUserDoc.data();
+                results.push({
+                  id: chatId,
+                  name: `${otherUserData.firstname} ${otherUserData.lastname}`,
+                  message: matchingMessage,
+                  profilePic:
+                    otherUserData.profilePicUrl || "/dist/defaultprofile.png",
+                });
+              }
+            }
+          }
+        }
+      }
+
+      // Display results
+      displaySearchResults(results, searchTerm);
+    } catch (error) {
+      console.error("Error searching:", error);
+    }
+  }, 300)
+);
+
+// Function to display results
+function displaySearchResults(results, searchTerm) {
+  const searchResults = document.getElementById("searchResults");
+  searchResults.innerHTML = "";
+
+  if (results.length === 0) {
+    searchResults.style.display = "none";
+    return;
+  }
+
+  results.forEach((result) => {
+    const resultItem = document.createElement("div");
+    resultItem.className = "search-result-item";
+
+    // Highlight matching text
+    const highlightedMessage = result.message.replace(
+      new RegExp(searchTerm, "gi"),
+      (match) => `<span class="highlight">${match}</span>`
+    );
+
+    resultItem.innerHTML = `
+            <img src="${
+              result.profilePic || "/dist/defaultprofile.png"
+            }" class="result-avatar" />
+            <div class="result-content">
+                <div class="result-name">${result.name}</div>
+                <div class="result-message">${highlightedMessage}</div>
+            </div>
+        `;
+
+    resultItem.addEventListener("click", () => {
+      window.location.href = `/chat/chat.html?chatId=${result.id}`;
+    });
+
+    searchResults.appendChild(resultItem);
+  });
+
+  searchResults.style.display = "block";
+}
+
+// Close search results when clicking outside
+document.addEventListener("click", (e) => {
+  const searchResults = document.getElementById("searchResults");
+  const searchContainer = document.querySelector(".searchContainer");
+
+  if (!searchContainer.contains(e.target)) {
+    searchResults.style.display = "none";
+  }
+});
