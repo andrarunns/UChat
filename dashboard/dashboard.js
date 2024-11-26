@@ -815,3 +815,149 @@ async function updateOnlineStatus() {
 setInterval(updateOnlineStatus, 60000);
 document.addEventListener('DOMContentLoaded', updateOnlineStatus);
 window.addEventListener('beforeunload', updateOnlineStatus);
+
+
+// Add the debounce helper function
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+      const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+  };
+}
+
+// Add the search functionality
+// Keep the debounce function and imports the same
+
+const searchInput = document.getElementById('searchInput');
+
+searchInput.addEventListener('input', debounce(async (e) => {
+    const searchTerm = e.target.value.toLowerCase().trim();
+    const searchResults = document.getElementById('searchResults');
+    
+    if (!searchTerm) {
+        searchResults.style.display = 'none';
+        return;
+    }
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+        // Get user's chats
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnapshot = await getDoc(userDocRef);
+        const conversations = userDocSnapshot.data().chats || [];
+
+        const results = [];
+        
+        // Fetch and filter conversations
+        for (const chatId of conversations) {
+            const chatDoc = await getDoc(doc(db, "chats", chatId));
+            if (chatDoc.exists()) {
+                const chatData = chatDoc.data();
+                
+                // Get all messages from this chat
+                const messagesRef = collection(db, "chats", chatId, "messages");
+                const messagesSnapshot = await getDocs(messagesRef);
+                
+                let matchFound = false;
+                let matchingMessage = '';
+                
+                // Search through all messages
+                messagesSnapshot.forEach((messageDoc) => {
+                    const messageData = messageDoc.data();
+                    if (messageData.text && 
+                        messageData.text.toLowerCase().includes(searchTerm)) {
+                        matchFound = true;
+                        matchingMessage = messageData.text; // Keep the matching message
+                    }
+                });
+
+                if (matchFound) {
+                    if (chatData.name) {
+                        // Group chat
+                        results.push({
+                            id: chatId,
+                            name: chatData.name,
+                            message: matchingMessage // Show the matching message
+                        });
+                    } else {
+                        // Individual chat
+                        const otherUserId = chatData.participants.find(id => id !== user.uid);
+                        const otherUserDoc = await getDoc(doc(db, "users", otherUserId));
+                        
+                        if (otherUserDoc.exists()) {
+                            const otherUserData = otherUserDoc.data();
+                            results.push({
+                                id: chatId,
+                                name: `${otherUserData.firstname} ${otherUserData.lastname}`,
+                                message: matchingMessage, // Show the matching message
+                                profilePic: otherUserData.profilePicUrl || '/dist/defaultprofile.png'
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        // Display results
+        displaySearchResults(results, searchTerm);
+    } catch (error) {
+        console.error("Error searching:", error);
+    }
+}, 300));
+
+// Function to display results (keep the same)
+function displaySearchResults(results, searchTerm) {
+    const searchResults = document.getElementById('searchResults');
+    searchResults.innerHTML = '';
+
+    if (results.length === 0) {
+        searchResults.style.display = 'none';
+        return;
+    }
+
+    results.forEach(result => {
+        const resultItem = document.createElement('div');
+        resultItem.className = 'search-result-item';
+        
+        // Highlight matching text
+        const highlightedMessage = result.message.replace(
+            new RegExp(searchTerm, 'gi'),
+            match => `<span class="highlight">${match}</span>`
+        );
+
+        resultItem.innerHTML = `
+            <img src="${result.profilePic || '/dist/defaultprofile.png'}" class="result-avatar" />
+            <div class="result-content">
+                <div class="result-name">${result.name}</div>
+                <div class="result-message">${highlightedMessage}</div>
+            </div>
+        `;
+
+        resultItem.addEventListener('click', () => {
+            window.location.href = `/chat/chat.html?chatId=${result.id}`;
+        });
+
+        searchResults.appendChild(resultItem);
+    });
+
+    searchResults.style.display = 'block';
+}
+
+// Keep the click outside handler the same
+
+// Close search results when clicking outside
+document.addEventListener('click', (e) => {
+  const searchResults = document.getElementById('searchResults');
+  const searchContainer = document.querySelector('.searchContainer');
+  
+  if (!searchContainer.contains(e.target)) {
+      searchResults.style.display = 'none';
+  }
+});
