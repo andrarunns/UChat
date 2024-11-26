@@ -66,7 +66,7 @@ if (addAccountForm) {
     // If password is less than 6 characters, show an alert and return to stop further code execution
     if (pass.length < 6) {
       alert("Password must be at least 6 characters long.");
-      return; // This will exit the function and prevent further code execution
+      return;
     }
 
     // Set session persistence
@@ -82,7 +82,6 @@ if (addAccountForm) {
         // Reference to the new user document
         const userRef = doc(db, "users", uid);
 
-        // New user data to add
         const newUser = {
           firstname: firstname,
           lastname: lastname,

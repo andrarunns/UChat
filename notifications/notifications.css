@@ -15,7 +15,7 @@ body {
   height: 100vh;
   background-color: #f4f4f9;
   position: relative;
-  padding-top: 100px; /* Added padding to avoid overlap with the top banner */
+  padding-top: 100px;
 }
 
 /* Top Banner Styling */
@@ -121,7 +121,7 @@ body {
   height: 100vh;
   background-color: #f4f4f9;
   position: relative;
-  padding-top: 100px; /* Added padding to avoid overlap with the top banner */
+  padding-top: 100px;
 }
 
 /* Top Banner Styling */
@@ -131,19 +131,19 @@ body {
   padding: 10px 20px;
   background-color: #2b3030;
   display: flex;
-  justify-content: space-between; /* Updated for centered content */
+  justify-content: space-between;
   align-items: center;
   position: absolute;
   top: 0;
   left: 0;
-  padding: 10px 20px; /* Padding on the top and sides */
+  padding: 10px 20px;
 }
 
 .topBanner h1 {
   color: orange;
   font-size: 70px;
   font-weight: bold;
-  margin-right: 10px; /* Added some margin for spacing */
+  margin-right: 10px;
 }
 
 /* Adjusting the pickaxe image next to the title */
@@ -156,7 +156,7 @@ body {
 .topBannerButtons {
   display: flex;
   gap: 10px;
-  margin-left: auto; /* Move the buttons to the right side */
+  margin-left: auto;
 }
 
 button {
@@ -175,34 +175,34 @@ button:hover {
 
 #newChat {
   background-color: orange;
-  color: white; /* Ensure text color stays white */
+  color: white;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 #newChat:hover {
-  background-color: #ff7f00; /* Darker orange for hover effect */
-  transform: scale(1.05); /* Slightly enlarge the button on hover */
+  background-color: #ff7f00;
+  transform: scale(1.05);
 }
 
 #signOutButton {
-  background-color: rgba(8, 8, 98, 1); /* Original background color */
-  color: white; /* Text color remains white */
+  background-color: rgba(8, 8, 98, 1);
+  color: white;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for both background and scale */
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 #signOutButton:hover {
-  background-color: rgba(8, 8, 98, 0.8); /* Darker shade for hover */
-  transform: scale(1.05); /* Slightly enlarge on hover */
+  background-color: rgba(8, 8, 98, 0.8);
+  transform: scale(1.05);
 }
 
 #signOut:hover {
@@ -213,10 +213,10 @@ button:hover {
 .searchContainer {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Align to the left */
+  justify-content: flex-start;
   width: 50%;
-  margin-left: 150px; /* Move search bar to the right */
-  margin-right: auto; /* Center it within the banner */
+  margin-left: 150px;
+  margin-right: auto;
 }
 
 input[type="text"] {
@@ -225,7 +225,7 @@ input[type="text"] {
   border-radius: 4px;
   border: none;
   font-size: 14px;
-  margin-right: 10px; /* Add margin between search bar and notification icon */
+  margin-right: 10px;
 }
 
 #notificationBell {
@@ -286,7 +286,7 @@ input[type="text"] {
 /* Responsive Layout */
 @media (max-width: 768px) {
   body {
-    padding-top: 50px; /* Adjust for mobile view */
+    padding-top: 50px;
   }
 
   .topBanner h1 {
@@ -329,7 +329,6 @@ input[type="text"] {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Optional: Add icons or avatars to chat items */
 .chat-item .chat-icon {
   width: 40px;
   height: 40px;
