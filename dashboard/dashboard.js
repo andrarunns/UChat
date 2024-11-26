@@ -761,27 +761,42 @@ function resetUploadForm() {
   uploadProfilePicture.textContent = "Upload Picture";
 }
 
-// Handle reset password
-document
-  .getElementById("resetPasswordButton")
-  .addEventListener("click", async () => {
+// Update your password reset event listener
+document.getElementById("resetPasswordButton").addEventListener("click", async () => {
     const user = auth.currentUser;
     if (!user) {
-      alert("You must be logged in to reset your password.");
-      return;
+        alert("You must be logged in to reset your password.");
+        return;
     }
-
-    const email = user.email;
 
     try {
-      await sendPasswordResetEmail(email);
-      alert("Password reset email sent! Please check your inbox.");
+        // Pass both the auth instance and the email
+        await sendPasswordResetEmail(auth, user.email);
+        alert("Password reset email sent! Please check your inbox.");
+        
+        // Optionally close any open modals/dropdowns
+        const settingsModal = document.getElementById('settingsModal');
+        if (settingsModal) {
+            settingsModal.style.display = "none";
+        }
     } catch (error) {
-      console.error("Error resetting password:", error);
-      alert("Error resetting password. Please try again.");
+        console.error("Error resetting password:", error);
+        // Provide more specific error messages based on the error code
+        switch (error.code) {
+            case 'auth/invalid-email':
+                alert("Invalid email address.");
+                break;
+            case 'auth/user-not-found':
+                alert("No user found with this email address.");
+                break;
+            case 'auth/too-many-requests':
+                alert("Too many requests. Please try again later.");
+                break;
+            default:
+                alert("Error resetting password. Please try again.");
+        }
     }
-  });
-
+});
 // update user's status
 async function updateOnlineStatus() {
   const user = auth.currentUser;
@@ -944,3 +959,4 @@ document.addEventListener("click", (e) => {
     searchResults.style.display = "none";
   }
 });
+
