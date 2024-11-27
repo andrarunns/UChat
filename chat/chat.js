@@ -29,7 +29,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);  // Initialize Firebase Storage
+const storage = getStorage(app);
 
 // Get the chat ID from the URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -49,54 +49,54 @@ async function loadChatData() {
       const messagesQuery = query(messagesCollectionRef, orderBy("timestamp"));
       const messagesSnapshot = await getDocs(messagesQuery);
       const messages = messagesSnapshot.docs.map((doc) => doc.data());
-    
+
       const messagesContainer = document.getElementById("messages");
-      messagesContainer.innerHTML = '';  // Clear existing messages
-    
+      messagesContainer.innerHTML = '';
+
       messages.forEach((msg) => {
         const messageDiv = document.createElement("div");
         messageDiv.classList.add("message");
-        
+
         const senderDiv = document.createElement("strong");
         senderDiv.innerText = `${msg.sender}:`;
-    
+
         const textDiv = document.createElement("div");
-        textDiv.innerText = msg.text || "No text message";  // Display text if present
-    
+        textDiv.innerText = msg.text || "No text message";
+
         // Append sender and message text
         messageDiv.appendChild(senderDiv);
         messageDiv.appendChild(textDiv);
-    
+
         // Check for fileURL (image)
         if (msg.fileURL) {
           const fileExtension = msg.fileURL.split('.').pop().toLowerCase();
           const fileType = fileExtension.slice(0, 3);
-        
+
           if (['png', 'jpg', 'jpeg'].includes(fileType)) {
             // Check if the file URL is correct
             console.log(msg.fileURL);
-        
+
             // Create a link element to display the file URL
             const link = document.createElement("a");
-            link.href = msg.fileURL; // Set the URL to the link
-            link.target = "_blank"; // Open in new tab
-            link.innerText = msg.fileURL; // Set the URL as the link text
-        
+            link.href = msg.fileURL;
+            link.target = "_blank";
+            link.innerText = msg.fileURL;
+
             // Append the link (URL) to the message text
-            textDiv.appendChild(link);  // Append to the textDiv, instead of replacing the content
+            textDiv.appendChild(link);
           }
         } else {
-          textDiv.innerText = msg.text || "No text message"; // If no fileURL, display regular message text
+          textDiv.innerText = msg.text || "No text message";
         }
-        
-    
+
+
         messagesContainer.appendChild(messageDiv);
       });
-    
-      messagesContainer.scrollTop = messagesContainer.scrollHeight; // Auto-scroll to the bottom
+
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     };
-    
-    
+
+
     // Initial rendering of messages
     await renderMessages();
 
@@ -114,7 +114,7 @@ async function loadChatData() {
             if (msg.fileURL) {
               const fileExtension = msg.fileURL.split('.').pop().toLowerCase();
               console.log("there is a file to display")
-              const fileType = fileExtension.slice(0,3);
+              const fileType = fileExtension.slice(0, 3);
               if (fileType === 'png' || fileType === 'jpg' || fileType === 'jpeg') {
                 messageHTML += `<img src="${msg.fileURL}" alt="Attached Image" class="message-image" />`;
                 console.log("we are tyring ")
@@ -124,20 +124,20 @@ async function loadChatData() {
             return messageHTML;
           })
           .join("");
-        messagesContainer.scrollTop = messagesContainer.scrollHeight; // Auto-scroll
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
       }
     );
 
     // Send message functionality
     const messageInput = document.getElementById("messageInput");
     const sendButton = document.getElementById("sendButton");
-    const fileInput = document.getElementById("fileInput");  // File input element
+    const fileInput = document.getElementById("fileInput");
 
     sendButton.addEventListener("click", async () => {
       const messageText = messageInput.value.trim();
-      const file = fileInput.files[0];  // Get the selected file (if any)
+      const file = fileInput.files[0];
 
-      if (messageText === "" && !file) return; // Don't send empty messages or without file
+      if (messageText === "" && !file) return;
 
       try {
         let messageData = {
@@ -151,7 +151,7 @@ async function loadChatData() {
           const storageRef = ref(storage, `chat_files/${file.name}`);
           const fileSnapshot = await uploadBytes(storageRef, file);
           const fileURL = await getDownloadURL(fileSnapshot.ref);
-          messageData.fileURL = fileURL;  // Save the file URL in the message
+          messageData.fileURL = fileURL;
         }
 
         // Add the message (with or without file) to the messages collection
@@ -163,8 +163,8 @@ async function loadChatData() {
           lastMessageAt: serverTimestamp(),
         });
 
-        messageInput.value = ""; // Clear input after sending
-        fileInput.value = "";   // Clear file input after sending
+        messageInput.value = "";
+        fileInput.value = "";
       } catch (error) {
         console.error("Error sending message:", error);
       }

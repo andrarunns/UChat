@@ -15,7 +15,7 @@ body {
   height: 100vh;
   background-color: #f4f4f9;
   position: relative;
-  padding-top: 100px; /* Added padding to avoid overlap with the top banner */
+  padding-top: 100px;
 }
 
 /* Top Banner Styling */
@@ -33,7 +33,7 @@ body {
 }
 
 .topBanner h1 {
-  color: orange;
+  color: #ffa500;
   font-size: 50px;
   font-weight: bold;
   margin: 0;
@@ -53,7 +53,7 @@ body {
   max-width: 800px;
   background-color: #fff;
   border-radius: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px #0000001a;
   padding: 20px;
   height: 80%;
   overflow-y: auto;
@@ -92,7 +92,7 @@ body {
   width: 15%;
   padding: 12px;
   border-radius: 10px;
-  background-color: orange;
+  background-color: #ffa500;
   border: none;
   color: white;
   font-size: 14px;
@@ -121,7 +121,7 @@ body {
   height: 100vh;
   background-color: #f4f4f9;
   position: relative;
-  padding-top: 100px; /* Added padding to avoid overlap with the top banner */
+  padding-top: 100px;
 }
 
 /* Top Banner Styling */
@@ -131,22 +131,21 @@ body {
   padding: 10px 20px;
   background-color: #2b3030;
   display: flex;
-  justify-content: space-between; /* Updated for centered content */
+  justify-content: space-between;
   align-items: center;
   position: absolute;
   top: 0;
   left: 0;
-  padding: 10px 20px; /* Padding on the top and sides */
+  padding: 10px 20px;
 }
 
 .topBanner h1 {
-  color: orange;
+  color: #ffa500;
   font-size: 70px;
   font-weight: bold;
-  margin-right: 10px; /* Added some margin for spacing */
+  margin-right: 10px;
 }
 
-/* Adjusting the pickaxe image next to the title */
 .topBanner img.pickaxe {
   height: 60px;
   width: auto;
@@ -156,11 +155,11 @@ body {
 .topBannerButtons {
   display: flex;
   gap: 10px;
-  margin-left: auto; /* Move the buttons to the right side */
+  margin-left: auto;
 }
 
 button {
-  background-color: orange;
+  background-color: #ffa500;
   color: #fff;
   padding: 8px 16px;
   border: none;
@@ -174,35 +173,35 @@ button:hover {
 }
 
 #newChat {
-  background-color: orange;
-  color: white; /* Ensure text color stays white */
+  background-color: #ffa500;
+  color: #fff;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 #newChat:hover {
-  background-color: #ff7f00; /* Darker orange for hover effect */
-  transform: scale(1.05); /* Slightly enlarge the button on hover */
+  background-color: #ff7f00;
+  transform: scale(1.05);
 }
 
 #signOutButton {
-  background-color: rgba(8, 8, 98, 1); /* Original background color */
-  color: white; /* Text color remains white */
+  background-color: #080862;
+  color: #fff;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for both background and scale */
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 #signOutButton:hover {
-  background-color: rgba(8, 8, 98, 0.8); /* Darker shade for hover */
-  transform: scale(1.05); /* Slightly enlarge on hover */
+  background-color: #080862cc;
+  transform: scale(1.05);
 }
 
 #signOut:hover {
@@ -213,10 +212,10 @@ button:hover {
 .searchContainer {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Align to the left */
+  justify-content: flex-start;
   width: 50%;
-  margin-left: 150px; /* Move search bar to the right */
-  margin-right: auto; /* Center it within the banner */
+  margin-left: 150px;
+  margin-right: auto;
 }
 
 input[type="text"] {
@@ -225,7 +224,7 @@ input[type="text"] {
   border-radius: 4px;
   border: none;
   font-size: 14px;
-  margin-right: 10px; /* Add margin between search bar and notification icon */
+  margin-right: 10px;
 }
 
 #notificationBell {
@@ -242,14 +241,14 @@ input[type="text"] {
   right: 5px;
   height: 8px;
   width: 8px;
-  background-color: red;
+  background-color: #ff0000;
   border-radius: 50%;
   display: none;
 }
 
 /* Modal for Add Friend */
 #addFriendModal {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #00000080;
   position: fixed;
   top: 0;
   left: 0;
@@ -261,7 +260,7 @@ input[type="text"] {
 }
 
 .modal-content {
-  background-color: white;
+  background-color: #fff;
   padding: 20px;
   border-radius: 10px;
   width: 300px;
@@ -276,7 +275,7 @@ input[type="text"] {
 
 .modal-content button {
   background-color: #0177ff;
-  color: white;
+  color: #fff;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -286,7 +285,7 @@ input[type="text"] {
 /* Responsive Layout */
 @media (max-width: 768px) {
   body {
-    padding-top: 50px; /* Adjust for mobile view */
+    padding-top: 50px;
   }
 
   .topBanner h1 {
@@ -316,7 +315,7 @@ input[type="text"] {
   border-radius: 15px;
   border: 1px solid #ddd;
   background-color: #f8f8f8;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px #0000001a;
   font-family: "Dosis", sans-serif;
   font-size: 16px;
   color: #333;
@@ -326,7 +325,7 @@ input[type="text"] {
 
 .chat-item:hover {
   background-color: #eaeaea;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px #00000033;
 }
 
 /* Optional: Add icons or avatars to chat items */
@@ -360,15 +359,15 @@ input[type="text"] {
 
 /* Hide the default file input */
 #fileInput {
-  display: none; /* Hide the default file input */
+  display: none;
 }
 
 /* Style the custom file input to look like the send button */
 .fileInputWrapper {
   display: inline-block;
   cursor: pointer;
-  background-color: orange;
-  color: white;
+  background-color: #ffa500;
+  color: #fff;
   padding: 12px;
   border-radius: 10px;
   font-size: 14px;
