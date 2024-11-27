@@ -33,7 +33,7 @@ body {
 }
 
 .topBanner h1 {
-  color: orange;
+  color: #ffa500;
   font-size: 50px;
   font-weight: bold;
   margin: 0;
@@ -53,7 +53,7 @@ body {
   max-width: 800px;
   background-color: #fff;
   border-radius: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px #0000001a;
   padding: 20px;
   height: 80%;
   overflow-y: auto;
@@ -92,9 +92,9 @@ body {
   width: 15%;
   padding: 12px;
   border-radius: 10px;
-  background-color: orange;
+  background-color: #ffa500;
   border: none;
-  color: white;
+  color: #ffffff;
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -140,7 +140,7 @@ body {
 }
 
 .topBanner h1 {
-  color: orange;
+  color: #ffa500;
   font-size: 70px;
   font-weight: bold;
   margin-right: 10px;
@@ -160,7 +160,7 @@ body {
 }
 
 button {
-  background-color: orange;
+  background-color: #ffa500;
   color: #fff;
   padding: 8px 16px;
   border: none;
@@ -174,8 +174,8 @@ button:hover {
 }
 
 #newChat {
-  background-color: orange;
-  color: white;
+  background-color: #ffa500;
+  color: #ffffff;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -191,7 +191,7 @@ button:hover {
 
 #signOutButton {
   background-color: rgba(8, 8, 98, 1);
-  color: white;
+  color: #ffffff;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -201,7 +201,7 @@ button:hover {
 }
 
 #signOutButton:hover {
-  background-color: rgba(8, 8, 98, 0.8);
+  background-color: #080862cc;
   transform: scale(1.05);
 }
 
@@ -242,14 +242,14 @@ input[type="text"] {
   right: 5px;
   height: 8px;
   width: 8px;
-  background-color: red;
+  background-color: #ff0000;
   border-radius: 50%;
   display: none;
 }
 
 /* Modal for Add Friend */
 #addFriendModal {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #00000080;
   position: fixed;
   top: 0;
   left: 0;
@@ -261,7 +261,7 @@ input[type="text"] {
 }
 
 .modal-content {
-  background-color: white;
+  background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
   width: 300px;
@@ -276,7 +276,7 @@ input[type="text"] {
 
 .modal-content button {
   background-color: #0177ff;
-  color: white;
+  color: #ffffff;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -316,7 +316,7 @@ input[type="text"] {
   border-radius: 15px;
   border: 1px solid #ddd;
   background-color: #f8f8f8;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px #0000001a;
   font-family: "Dosis", sans-serif;
   font-size: 16px;
   color: #333;
@@ -326,7 +326,7 @@ input[type="text"] {
 
 .chat-item:hover {
   background-color: #eaeaea;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px #00000033;
 }
 
 .chat-item .chat-icon {

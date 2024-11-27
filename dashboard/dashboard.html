@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,16 +8,11 @@
     <!-- Google Fonts and FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap"
-        rel="stylesheet"
-    />
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="messagingDashboard.css" />
 </head>
+
 <body>
     <!-- Top Banner Section -->
     <div class="topBanner">
@@ -33,33 +29,33 @@
         </div>
         <!-- Buttons inside the top banner -->
         <div class="topBannerButtons">
-          <button id="addFriendButton">+ Add Friend</button>
-          <button id="newChat">+ New Chat</button>
-          <button id="newGroupChatButton">+ New Group Chat</button>
-          <ul id="friendsDropdown" style="display: none"></ul>
-          <div class="settings-container">
-            <button id="settingsButton">
-                <i class="fas fa-gear"></i>
-            </button>
-            <div class="settings-dropdown">
-                <ul>
-                    <li id="profilePictureButton">
-                        <i class="fas fa-camera"></i>
-                        Change Profile Picture
-                    </li>
-                    <li id="resetPasswordButton">
-                        <i class="fas fa-key"></i>
-                        Reset Password
-                    </li>
-                    <li id="signOutButton">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Sign Out
-                    </li>
-                </ul>
+            <button id="addFriendButton">+ Add Friend</button>
+            <button id="newChat">+ New Chat</button>
+            <button id="newGroupChatButton">+ New Group Chat</button>
+            <ul id="friendsDropdown" style="display: none"></ul>
+            <div class="settings-container">
+                <button id="settingsButton">
+                    <i class="fas fa-gear"></i>
+                </button>
+                <div class="settings-dropdown">
+                    <ul>
+                        <li id="profilePictureButton">
+                            <i class="fas fa-camera"></i>
+                            Change Profile Picture
+                        </li>
+                        <li id="resetPasswordButton">
+                            <i class="fas fa-key"></i>
+                            Reset Password
+                        </li>
+                        <li id="signOutButton">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Sign Out
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-      </div>
-        </div>
+    </div>
     </div>
 
     <!-- Content Container -->
@@ -74,12 +70,12 @@
         <!-- Main Content Area -->
         <div class="main-content">
             <div class="welcome-message">
-              <h2>Welcome to UChat</h2>
-              <p>
-                  <i class="fas fa-comments"></i>
-                  Select a conversation to start chatting
-              </p>
-          </div>
+                <h2>Welcome to UChat</h2>
+                <p>
+                    <i class="fas fa-comments"></i>
+                    Select a conversation to start chatting
+                </p>
+            </div>
         </div>
     </div>
 
@@ -88,52 +84,44 @@
         <div class="modal-content">
             <span class="close" id="closeModal">&times;</span>
             <h3>Add a Friend</h3>
-            <input
-                type="text"
-                id="friendEmail"
-                placeholder="Enter friend's email"
-            />
+            <input type="text" id="friendEmail" placeholder="Enter friend's email" />
             <button id="sendFriendRequest">Send Request</button>
         </div>
     </div>
     <!-- New Group Chat Modal -->
     <div id="newGroupChatModal" class="modal">
-      <div class="modal-content">
-        <span class="close" id="closeNewGroupChatModal">&times;</span>
-        <h3>Create a New Group Chat</h3>
-        
-        <!-- Group Chat Name Input -->
-        <input type="text" id="groupChatName" placeholder="Group chat name" />
+        <div class="modal-content">
+            <span class="close" id="closeNewGroupChatModal">&times;</span>
+            <h3>Create a New Group Chat</h3>
 
-        <!-- New section for selecting friends -->
-        <h4>Select Friends</h4>
-        <div id="friendsSelectionContainer">
-          <ul id="friendsList">
-          </ul>
+            <!-- Group Chat Name Input -->
+            <input type="text" id="groupChatName" placeholder="Group chat name" />
+
+            <!-- New section for selecting friends -->
+            <h4>Select Friends</h4>
+            <div id="friendsSelectionContainer">
+                <ul id="friendsList">
+                </ul>
+            </div>
+
+            <!-- Create Group Chat Button -->
+            <button id="createGroupChatButton">Create Group Chat</button>
         </div>
-
-        <!-- Create Group Chat Button -->
-        <button id="createGroupChatButton">Create Group Chat</button>
-      </div>
     </div>
 
     <div id="addProfileModal">
-      <div class="modal-content">
-          <span class="close" id="closeProfileModal">&times;</span>
-          <h3>Change Profile Picture</h3>
-          <div class="preview-container">
-              <img id="imagePreview" src="/dist/default-avatar.png" alt="Preview">
-          </div>
-          <input
-              type="file"
-              id="profilePictureInput"
-              accept="image/*"
-              hidden
-          />
-          <button id="selectImageBtn" class="select-btn">Choose Image</button>
-          <button id="uploadProfilePicture" class="upload-btn" disabled>Upload Picture</button>
-      </div>
-  </div>
+        <div class="modal-content">
+            <span class="close" id="closeProfileModal">&times;</span>
+            <h3>Change Profile Picture</h3>
+            <div class="preview-container">
+                <img id="imagePreview" src="/dist/default-avatar.png" alt="Preview">
+            </div>
+            <input type="file" id="profilePictureInput" accept="image/*" hidden />
+            <button id="selectImageBtn" class="select-btn">Choose Image</button>
+            <button id="uploadProfilePicture" class="upload-btn" disabled>Upload Picture</button>
+        </div>
+    </div>
     <script src="../dist/dashboard.bundle.js"></script>
 </body>
+
 </html>

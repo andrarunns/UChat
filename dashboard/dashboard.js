@@ -119,7 +119,6 @@ async function fetchUserConversations() {
 
           conversationsContainer.appendChild(listItem);
         } else {
-          // It's an individual chat
           const otherUsers = chatData.participants.filter(
             (participant) => participant !== user.uid
           );
@@ -138,7 +137,6 @@ async function fetchUserConversations() {
               const otherUserData = userDocSnapshot.data();
               const fullName = `${otherUserData.firstname} ${otherUserData.lastname}`;
 
-              // Create the list item
               const listItem = document.createElement("li");
               listItem.className = "chat-item";
 
@@ -344,7 +342,7 @@ async function initializeFriendsDropdown(user) {
     newChatButton.addEventListener("click", () => {
       friendsDropdown.style.display =
         friendsDropdown.style.display === "none" ||
-        !friendsDropdown.style.display
+          !friendsDropdown.style.display
           ? "block"
           : "none";
     });
@@ -763,39 +761,39 @@ function resetUploadForm() {
 
 // Update your password reset event listener
 document.getElementById("resetPasswordButton").addEventListener("click", async () => {
-    const user = auth.currentUser;
-    if (!user) {
-        alert("You must be logged in to reset your password.");
-        return;
-    }
+  const user = auth.currentUser;
+  if (!user) {
+    alert("You must be logged in to reset your password.");
+    return;
+  }
 
-    try {
-        // Pass both the auth instance and the email
-        await sendPasswordResetEmail(auth, user.email);
-        alert("Password reset email sent! Please check your inbox.");
-        
-        // Optionally close any open modals/dropdowns
-        const settingsModal = document.getElementById('settingsModal');
-        if (settingsModal) {
-            settingsModal.style.display = "none";
-        }
-    } catch (error) {
-        console.error("Error resetting password:", error);
-        // Provide more specific error messages based on the error code
-        switch (error.code) {
-            case 'auth/invalid-email':
-                alert("Invalid email address.");
-                break;
-            case 'auth/user-not-found':
-                alert("No user found with this email address.");
-                break;
-            case 'auth/too-many-requests':
-                alert("Too many requests. Please try again later.");
-                break;
-            default:
-                alert("Error resetting password. Please try again.");
-        }
+  try {
+    // Pass both the auth instance and the email
+    await sendPasswordResetEmail(auth, user.email);
+    alert("Password reset email sent! Please check your inbox.");
+
+    // Optionally close any open modals/dropdowns
+    const settingsModal = document.getElementById('settingsModal');
+    if (settingsModal) {
+      settingsModal.style.display = "none";
     }
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    // Provide more specific error messages based on the error code
+    switch (error.code) {
+      case 'auth/invalid-email':
+        alert("Invalid email address.");
+        break;
+      case 'auth/user-not-found':
+        alert("No user found with this email address.");
+        break;
+      case 'auth/too-many-requests':
+        alert("Too many requests. Please try again later.");
+        break;
+      default:
+        alert("Error resetting password. Please try again.");
+    }
+  }
 });
 // update user's status
 async function updateOnlineStatus() {
@@ -931,9 +929,8 @@ function displaySearchResults(results, searchTerm) {
     );
 
     resultItem.innerHTML = `
-            <img src="${
-              result.profilePic || "/dist/defaultprofile.png"
-            }" class="result-avatar" />
+            <img src="${result.profilePic || "/dist/defaultprofile.png"
+      }" class="result-avatar" />
             <div class="result-content">
                 <div class="result-name">${result.name}</div>
                 <div class="result-message">${highlightedMessage}</div>

@@ -34,7 +34,7 @@ body {
 }
 
 .topBanner h1 {
-  color: orange;
+  color: #ffa500;
   font-size: 70px;
   font-weight: bold;
   margin-right: 10px;
@@ -54,7 +54,7 @@ body {
 }
 
 button {
-  background-color: orange;
+  background-color: #ffa500;
   color: #fff;
   padding: 8px 16px;
   border: none;
@@ -68,8 +68,8 @@ button:hover {
 }
 
 #newChat {
-  background-color: orange;
-  color: white;
+  background-color: #ffa600;
+  color: #ffffff;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -84,8 +84,8 @@ button:hover {
 }
 
 #signOutButton {
-  background-color: rgba(8, 8, 98, 1);
-  color: white;
+  background-color: #080862;
+  color: #ffffff;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -95,7 +95,7 @@ button:hover {
 }
 
 #signOutButton:hover {
-  background-color: rgba(8, 8, 98, 0.8);
+  background-color: #080862cc;
   transform: scale(1.05);
 }
 
@@ -134,7 +134,7 @@ input[type="text"] {
 
 #notificationBell:hover {
   animation: swayBell 1s infinite ease-in-out;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  text-shadow: 0 0 10px #ffffffb3;
   filter: brightness(1.2);
 }
 
@@ -142,15 +142,19 @@ input[type="text"] {
   0% {
     transform: rotate(0deg);
   }
+
   25% {
     transform: rotate(-15deg);
   }
+
   50% {
     transform: rotate(0deg);
   }
+
   75% {
     transform: rotate(15deg);
   }
+
   100% {
     transform: rotate(0deg);
   }
@@ -158,7 +162,7 @@ input[type="text"] {
 
 /* Modal for Add Friend */
 #addFriendModal {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #00000080;
   position: fixed;
   top: 0;
   left: 0;
@@ -170,7 +174,7 @@ input[type="text"] {
 }
 
 #profileModal .modal-content {
-  background-color: white;
+  background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
   width: 300px;
@@ -178,7 +182,7 @@ input[type="text"] {
 }
 
 #addProfileModal {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #00000080;
   position: fixed;
   top: 0;
   left: 0;
@@ -195,7 +199,7 @@ input[type="text"] {
 }
 
 .modal-content {
-  background-color: white;
+  background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
   width: 300px;
@@ -283,7 +287,7 @@ input[type="text"] {
   margin: 4px 0;
   border-radius: 10px;
   background-color: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px #0000000d;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -294,7 +298,7 @@ input[type="text"] {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px #0000001a;
 }
 
 .chat-text {
@@ -319,7 +323,7 @@ input[type="text"] {
 
 .chat-item:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px #0000000d;
   background-color: #f5f5f5;
 }
 
@@ -332,7 +336,7 @@ input[type="text"] {
 #settingsButton {
   background: none;
   border: none;
-  color: white;
+  color: #ffffff;
   font-size: 20px;
   cursor: pointer;
   padding: 8px;
@@ -348,17 +352,19 @@ input[type="text"] {
   position: absolute;
   right: 0;
   top: 100%;
-  background-color: white;
+  background-color: #ffffff;
   min-width: 160px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px #0000001a;
   border-radius: 8px;
   overflow: hidden;
   z-index: 1000;
 }
+
 #settingsButton:hover {
   transform: rotate(90deg);
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 0 10px #ffffff80;
 }
+
 .settings-container:hover .settings-dropdown {
   display: block;
 }
@@ -393,6 +399,7 @@ input[type="text"] {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -404,9 +411,11 @@ input[type="text"] {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   70% {
     transform: translateY(3px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -526,9 +535,9 @@ input[type="text"] {
   position: absolute;
   top: calc(100% + 5px);
   right: 0;
-  background: white;
+  background: #ffffff;
   min-width: 250px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px #00000026;
   border-radius: 8px;
   padding: 8px 0;
   z-index: 1000;
@@ -574,7 +583,7 @@ input[type="text"] {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px #0000001a;
 }
 
 .friend-info {
@@ -592,6 +601,7 @@ input[type="text"] {
   position: relative;
   display: inline-block;
 }
+
 /* New Group Chat Modal Styling */
 #newGroupChatModal {
   display: none;
@@ -602,12 +612,12 @@ input[type="text"] {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: #00000066;
 }
 
 /* Modal Content */
 #newGroupChatModal .modal-content {
-  background-color: white;
+  background-color: #ffffff;
   margin: 15% auto;
   padding: 20px;
   border-radius: 10px;
@@ -640,8 +650,8 @@ input[type="text"] {
 }
 
 #newGroupChatButton {
-  background-color: orange;
-  color: white;
+  background-color: #ffa500;
+  color: #ffffff;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -654,6 +664,7 @@ input[type="text"] {
   background-color: #ff7f00;
   transform: scale(1.05);
 }
+
 /* Styling for Friends Selection in Modal */
 #friendsSelectionContainer {
   max-height: 200px;
@@ -676,26 +687,28 @@ input[type="text"] {
 #friendsList li {
   padding: 8px;
   cursor: pointer;
-  color: black;
+  color: #000000;
   background-color: #fff;
   border-radius: 5px;
   transition: background-color 0.2s ease;
 }
 
 #friendsList li.selected {
-  background-color: #cce5ff; /* Highlight selected items */
+  background-color: #cce5ff;
+  /* Highlight selected items */
 }
 
 /* Hover effect on list items */
 #friendsList li:hover {
-  background-color: #ddd; /* Light hover effect for better user experience */
+  background-color: #ddd;
+  /* Light hover effect for better user experience */
 }
 
 /* Button Styling */
 #newGroupChatModal button {
   padding: 10px 20px;
   background-color: #4caf50;
-  color: white;
+  color: #ffffff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -722,7 +735,7 @@ input[type="text"] {
 
 .status-indicator.online {
   background-color: #22c55e;
-  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+  box-shadow: 0 0 0 2px #22c55e33;
 }
 
 /* Search Container Styles */
@@ -735,9 +748,9 @@ input[type="text"] {
   top: calc(100% + 5px);
   left: 0;
   right: 0;
-  background: white;
+  background: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px #00000026;
   max-height: 300px;
   overflow-y: auto;
   display: none;
